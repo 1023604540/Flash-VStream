@@ -160,7 +160,7 @@ class VStreamMetaForCausalLM(ABC):
         image_features = self.get_model().get_vision_tower()(images)
         return image_features
 
-    def reshape_2x2_image_features(self, image_features):
+    def reshape_2x2_image_features(self, image_features):  #from (B ,P*P, D) to (B, P/2 * P/2, 4D), adjacent image features are put together
         B, P, D = image_features.shape
         patch_size = round(math.sqrt(P))
         assert patch_size % 2 == 0, "Patch size must be divisible by 2."
@@ -190,7 +190,7 @@ class VStreamMetaForCausalLM(ABC):
         turing_memory = model.forward(turing_memory, new_feature)
         return turing_memory
 
-    def compress_spatial_features(self, image_features, compress_size=1):
+    def compress_spatial_features(self, image_features, compress_size=1): # use 2d conv to compress spatial features from P*P to compress_size*compress_size
         compress_type = getattr(self.config, "compress_type", None)
         patch_size = round(math.sqrt(image_features.shape[1]))
         assert patch_size * patch_size == image_features.shape[1], f"For ViT feature map, {patch_size}*{patch_size}={patch_size**2} != {image_features.shape[1]}"
@@ -277,10 +277,10 @@ class VStreamMetaForCausalLM(ABC):
         return new_image_features
 
     def cat_proj(self, all_features):  # concatenate features and project them together
-        feature_split_size = [x.shape[0] for x in all_features]
+        feature_split_size = [x.shape[0] for x in all_features]  # patch size for each image
         feature_embed = torch.cat(all_features, dim=0)
         feature_proj = self.get_model().mm_projector(feature_embed)
-        feature_proj = torch.split(feature_proj, feature_split_size, dim=0)
+        feature_proj = torch.split(feature_proj, feature_split_size, dim=0)  # divide the projected features back
         return feature_proj
         
     def prepare_inputs_labels_for_multimodal(
@@ -305,7 +305,7 @@ class VStreamMetaForCausalLM(ABC):
                     )), dim=1)
                 elif target_shape - attention_mask.shape[1] < 0:
                     attention_mask = attention_mask[:, :target_shape]
-                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1
+                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1  # represents the position of the last valid token in the sequence
             return input_ids, position_ids, attention_mask, past_key_values, None, labels
 
         if (features is not None) or (type(images) is list) or (images.ndim == 5):
@@ -316,7 +316,7 @@ class VStreamMetaForCausalLM(ABC):
                 image_features = self.encode_images(concat_images)  # [B*T, P, D]
                 if getattr(self.config, 'mm_use_4_vision_tokens', False):
                     image_features = self.reshape_2x2_image_features(image_features)  # [B*T, P/4, 4*D]
-                image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D]
+                image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D]  # compress spatial features
                 split_sizes = [image.shape[0] for image in images]
                 image_features = torch.split(image_features, split_sizes, dim=0)  # [B, T, P, D]
             else:
@@ -326,7 +326,7 @@ class VStreamMetaForCausalLM(ABC):
                     image_features = [self.reshape_2x2_image_features(img_feature) for img_feature in image_features]  # [B*T, P/4, 4*D]
                 image_features = [self.compress_spatial_features(image_feature, compress_size) for image_feature in image_features]  # [B*T, P', D]
             # perform memory consolidation
-            image_features = self.compress_temporal_features(image_features)  # [B, TP, D]
+            image_features = self.compress_temporal_features(image_features)  # [B, TP, D] # compress temporal features
             image_features = [x.to(self.device) for x in image_features]  # [B, TP, D]
             image_features = self.cat_proj(image_features)
         else:
@@ -348,17 +348,17 @@ class VStreamMetaForCausalLM(ABC):
             attention_mask = attention_mask.bool()
         if position_ids is None:
             position_ids = torch.arange(0, input_ids.shape[1], dtype=torch.long, device=input_ids.device)
-        if labels is None:
+        if labels is None:  # if labels are not provided, use IGNORE_INDEX. This tells the model to ignore these tokens for loss computation.
             labels = torch.full_like(input_ids, IGNORE_INDEX)
 
         # remove the padding using attention_mask -- TODO: double check
-        input_ids = [cur_input_ids[cur_attention_mask] for cur_input_ids, cur_attention_mask in zip(input_ids, attention_mask)]
-        labels = [cur_labels[cur_attention_mask] for cur_labels, cur_attention_mask in zip(labels, attention_mask)]
+        input_ids = [cur_input_ids[cur_attention_mask] for cur_input_ids, cur_attention_mask in zip(input_ids, attention_mask)] # only input_ids with True in attention mask are kept
+        labels = [cur_labels[cur_attention_mask] for cur_labels, cur_attention_mask in zip(labels, attention_mask)] # only labels with True in attention mask are kept
         new_input_embeds = []
         new_labels = []
         cur_image_idx = 0
         for batch_idx, cur_input_ids in enumerate(input_ids):
-            num_images = (cur_input_ids == IMAGE_TOKEN_INDEX).sum()
+            num_images = (cur_input_ids == IMAGE_TOKEN_INDEX).sum() # count number of image tokens in the input_ids
             if num_images == 0:
                 cur_image_features = image_features[cur_image_idx]
                 cur_input_embeds_1 = self.get_model().embed_tokens(cur_input_ids)
@@ -478,7 +478,7 @@ class VStreamMetaForCausalLM(ABC):
         while attempt_times < 300:
             try:
                 with self.video_embedding_mem_lock:
-                    cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory
+                    cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_streaming.py
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
                     image_features = [image_feature.to(self.device)]
@@ -699,8 +699,8 @@ class VStreamMetaForCausalLM(ABC):
 
     def initialize_vision_tokenizer(self, model_args, tokenizer):
         if model_args.mm_use_im_patch_token:
-            tokenizer.add_tokens([DEFAULT_IMAGE_PATCH_TOKEN], special_tokens=True)
-            self.resize_token_embeddings(len(tokenizer))
+            tokenizer.add_tokens([DEFAULT_IMAGE_PATCH_TOKEN], special_tokens=True)  # add special image token to vocabulary
+            self.resize_token_embeddings(len(tokenizer))  # resizes the model's embedding layer
 
         if model_args.mm_use_im_start_end:
             num_new_tokens = tokenizer.add_tokens([DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN], special_tokens=True)
@@ -715,7 +715,7 @@ class VStreamMetaForCausalLM(ABC):
                 output_embeddings_avg = output_embeddings[:-num_new_tokens].mean(
                     dim=0, keepdim=True)
 
-                input_embeddings[-num_new_tokens:] = input_embeddings_avg
+                input_embeddings[-num_new_tokens:] = input_embeddings_avg  # Initializes the new tokens' embeddings by average embedding values.
                 output_embeddings[-num_new_tokens:] = output_embeddings_avg
 
             if model_args.tune_mm_mlp_adapter:

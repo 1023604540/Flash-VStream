@@ -140,7 +140,7 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 
-    vr = VideoReader(video_file)
+    vr = VideoReader(video_file)  # read the video file
     sample_fps = round(vr.get_avg_fps() / video_fps)
     frame_idx = [i for i in range(0, len(vr), sample_fps)]
     video = vr.get_batch(frame_idx).asnumpy()
@@ -154,7 +154,7 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
             start_time = time.perf_counter()
             end = min(start + 1, length)
             video_clip = video[start:end]
-            frame_queue.put(video_clip)
+            frame_queue.put(video_clip)  # put the video clip into the queue
             if start > 0:
                 time_meter.add('real_sleep', start_time - last_start)
                 logger.info(f'Simulator: write {end - start} frames,\t{start} to {end},\treal_sleep={time_meter["real_sleep"]}')
