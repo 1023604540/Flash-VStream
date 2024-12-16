@@ -312,6 +312,7 @@ def main(args):
                     use_cache=True,
                     stopping_criteria=[stopping_criteria]
                 )
+                print("image_tensor Not used?", image_tensor)
             llm_end_time = time.perf_counter()
 
             outputs = tokenizer.decode(output_ids[0, input_ids.shape[1]:]).strip()

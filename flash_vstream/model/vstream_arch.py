@@ -639,6 +639,7 @@ class VStreamMetaForCausalLM(ABC):
         if type(images) is list or images.ndim == 5:
             assert len(images) == 1
             images = [image if len(image.shape) == 4 else image.unsqueeze(0) for image in images]  # [B, T, C, H, W]
+            print("images[0].shape = ", images[0].shape)
             concat_images = torch.cat([image for image in images], dim=0)  # [B*T, C, H, W]
             image_features = self.encode_images(concat_images)  # [B*T, P, D]
             image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D]
@@ -654,8 +655,10 @@ class VStreamMetaForCausalLM(ABC):
             cur_memory = image_feature[:0]
         else:
             cur_memory = image_feature[-cur_start:]  # [L_c, P*P, D]
+        print("cur_memory.shape =", cur_memory.shape)
         long_memory = image_feature
         Turing_memory = image_feature
+        print("image_feature.shape =", image_feature.shape)
         if compress_long_memory_size * compress_long_memory_size != long_memory.shape[1]:
             long_memory = self.compress_spatial_features(long_memory, compress_long_memory_size) # [L_l, P'*P', D]
         if compress_Turing_memory_size * compress_Turing_memory_size != Turing_memory.shape[1]:
@@ -668,6 +671,8 @@ class VStreamMetaForCausalLM(ABC):
                                         f'while video_sample_type = {compress_type} is not supported yet.')
         long_memory_compreesed = long_memory
         Turing_memory_compreesed = Turing_memory
+        print("long_memory_compreesed.shape =", long_memory_compreesed.shape)
+        print("Turing_memory_compreesed.shape =", Turing_memory_compreesed.shape)
         # Read old memory from shared memory, do not need an I/O lock
         if self.video_embedding_memory is not None and len(self.video_embedding_memory) > 0:
             old_cur_memory, old_long_memory_compreesed, old_Turing_memory_compreesed, old_img_feature_buffer = self.video_embedding_memory
@@ -676,19 +681,22 @@ class VStreamMetaForCausalLM(ABC):
             img_feature_buffer = torch.cat([old_img_feature_buffer, image_feature.cpu()], dim=0)
             assert isinstance(old_long_memory_compreesed, torch.Tensor) and old_long_memory_compreesed.shape[1:] == long_memory_compreesed.shape[1:]
             long_memory = torch.cat((old_long_memory_compreesed, long_memory_compreesed), dim=0)
-            long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length)
+            long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length)  # Temporal Memory
+            print("long_memory_compreesed.shape Temporal Memory=", long_memory_compreesed.shape)
             # Retrive key frames
             sorted_indices = torch.argsort(weight, descending=True)  # [L_long]
             key_centroids = long_memory[sorted_indices]  # [L_long, P'*P', D]
             key_length = 3
             if key_centroids.shape[0] > key_length:
-                key_centroids = key_centroids[:key_length]
+                key_centroids = key_centroids[:key_length]  # Select top-3 largest clusters
             dists = ((long_memory.unsqueeze(1) - key_centroids.unsqueeze(0)) ** 2).sum(dim=3).sum(dim=2).sqrt()  # [L_long, k_L]
             min_indices = torch.argmin(dists, dim=0)  # [k_L]
-            key_memory = img_feature_buffer[min_indices.cpu()].to(self.device)
+            key_memory = img_feature_buffer[min_indices.cpu()].to(self.device)  # Retrieved Memory
             cur_memory = torch.cat([key_memory, cur_memory], dim=0)
+            print("cur_memory.shape Spatial Memory=", cur_memory.shape)
             Turing_memory = torch.cat((old_Turing_memory_compreesed, Turing_memory_compreesed), dim=0)
-            Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)
+            Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)  # Abstract Memory
+            print("Turing_memory_compreesed.shape =", Turing_memory_compreesed.shape)
         # Write to shared memory, need an I/O lock
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
