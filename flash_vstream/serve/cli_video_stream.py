@@ -193,7 +193,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming(image_tensor)  # embed the video clip
+                model.embed_video_streaming(image_tensor)  # embed the video clip, create the memory
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:
@@ -304,7 +304,7 @@ def main(args):
             with torch.inference_mode():  # disable gradient calculation
                 output_ids = model.generate(
                     input_ids,
-                    images=image_tensor,  # not used?
+                    images=image_tensor,  # not used, None
                     do_sample=True if args.temperature > 0 else False,
                     temperature=args.temperature,
                     max_new_tokens=args.max_new_tokens,
@@ -312,7 +312,7 @@ def main(args):
                     use_cache=True,
                     stopping_criteria=[stopping_criteria]
                 )
-                print("image_tensor Not used?", image_tensor)
+
             llm_end_time = time.perf_counter()
 
             outputs = tokenizer.decode(output_ids[0, input_ids.shape[1]:]).strip()
