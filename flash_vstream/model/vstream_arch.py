@@ -326,7 +326,7 @@ class VStreamMetaForCausalLM(ABC):
                     image_features = [self.reshape_2x2_image_features(img_feature) for img_feature in image_features]  # [B*T, P/4, 4*D]
                 image_features = [self.compress_spatial_features(image_feature, compress_size) for image_feature in image_features]  # [B*T, P', D]
             # perform memory consolidation
-            image_features = self.compress_temporal_features(image_features)  # [B, TP, D] # compress temporal features
+            image_features = self.compress_temporal_features(image_features)  # [B, TP, D]  # Building memory by calling [compress_temporal_features] function
             image_features = [x.to(self.device) for x in image_features]  # [B, TP, D]
             image_features = self.cat_proj(image_features)
         else:
@@ -673,8 +673,8 @@ class VStreamMetaForCausalLM(ABC):
             old_cur_memory, old_long_memory_compreesed, old_Turing_memory_compreesed, old_img_feature_buffer = self.video_embedding_memory
             old_long_memory_compreesed = old_long_memory_compreesed.to(self.device)
             old_Turing_memory_compreesed = old_Turing_memory_compreesed.to(self.device)
-            img_feature_buffer = torch.cat([old_img_feature_buffer, image_feature.cpu()], dim=0)
-            print("img_feature_buffer.shape=", img_feature_buffer.shape)
+            img_feature_buffer = torch.cat([old_img_feature_buffer, image_feature.cpu()], dim=0)  # Feature Buffer [n, 64, 1024]
+            print("img_feature_buffer.shape=", img_feature_buffer.shape)  # [n, 64, 1024]
             assert isinstance(old_long_memory_compreesed, torch.Tensor) and old_long_memory_compreesed.shape[1:] == long_memory_compreesed.shape[1:]
             long_memory = torch.cat((old_long_memory_compreesed, long_memory_compreesed), dim=0)
             long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length)  # Temporal Memory  [maxsize=25, 16, 1024]
