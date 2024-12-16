@@ -640,13 +640,10 @@ class VStreamMetaForCausalLM(ABC):
             assert len(images) == 1
             images = [image if len(image.shape) == 4 else image.unsqueeze(0) for image in images]  # [B, T, C, H, W]  [1, 1, 3, 224, 224]
             concat_images = torch.cat([image for image in images], dim=0)  # [B*T, C, H, W]
-            image_features = self.encode_images(concat_images)  # [B*T, P, D]
-            print("image_features.shape =", image_features.shape)
-            image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D]
-            print("image_features.shape compressed=", image_features.shape)
+            image_features = self.encode_images(concat_images)  # [B*T, P, D] [1, 256, 1024]
+            image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D] [1, 64, 1024]
             split_sizes = [image.shape[0] for image in images]
-            image_features = torch.split(image_features, split_sizes, dim=0)  # [B, T, P, D]
-            print("image_features.shape split=", image_features.shape)
+            image_features = torch.split(image_features, split_sizes, dim=0)  # [B, T, P, D] [1, 1, 64, 1024]
         else:
             raise NotImplementedError('Should input video frames, not a single image')
         image_feature = image_features[0].detach().to(torch.float16).to(self.device)  # [T, P, D] [1, 64, 1024] # detach to avoid backpropagation
