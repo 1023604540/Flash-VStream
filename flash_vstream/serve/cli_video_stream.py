@@ -135,6 +135,8 @@ def worker_configurer(queue):
     root.setLevel(logging.DEBUG)
 
 def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, play_speed=1.0):
+    # simulates a video streaming process, reading frames from a video file, processing them,
+    # and adding them to a queue (frame_queue) at a specified frame rate
     ############## Start sub process-2: Simulator #############
     worker_configurer(log_queue)
     logger = logging.getLogger(__name__)
@@ -178,19 +180,20 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     frame_cnt = 0
     while True:
         try:
-            video_clip = frame_queue.get()
+            video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
+            # FIFO queue, retrieves the oldest element in the queue
             start_time = time.perf_counter()
             if video_clip is None:
                 logger.info(f'MemManager: Ooops, get None')
                 break
             logger.info(f'MemManager: get {video_clip.shape[0]} frames from queue')
-            image = image_processor.preprocess(video_clip, return_tensors='pt')['pixel_values']
+            image = image_processor.preprocess(video_clip, return_tensors='pt')['pixel_values']  # preprocess the video clip and return pytorch tensor
             image = image.unsqueeze(0)
             image_tensor = image.to(model.device, dtype=torch.float16)
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming(image_tensor)
+                model.embed_video_streaming(image_tensor)  # embed the video clip
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:
@@ -233,10 +236,10 @@ def main(args):
     else:
         roles = conv.roles
 
-    with Manager() as manager:
+    with Manager() as manager:  # Creates a shared memory space to manage inter-process communication
         image_tensor = None
         model.use_video_streaming_mode = True
-        model.video_embedding_memory = manager.list()
+        model.video_embedding_memory = manager.list()  # Creates a shared, synchronized object across processes, here to store the video clip embeddings
         if args.video_max_frames is not None:
             model.config.video_max_frames = args.video_max_frames
             logger.info(f'Important: set model.config.video_max_frames = {model.config.video_max_frames}')
@@ -253,6 +256,7 @@ def main(args):
         ############## Start memory manager process #############
         p3 = Process(target=frame_memory_manager, 
                      args=(model, image_processor, frame_queue, log_queue))
+        # Target is the function to be executed in this process, here frame_memory_manager embed the video clip
         processes.append(p3)
         p3.start()
 
@@ -297,10 +301,10 @@ def main(args):
             streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
 
             llm_start_time = time.perf_counter()
-            with torch.inference_mode():
+            with torch.inference_mode():  # disable gradient calculation
                 output_ids = model.generate(
                     input_ids,
-                    images=image_tensor,
+                    images=image_tensor,  # not used?
                     do_sample=True if args.temperature > 0 else False,
                     temperature=args.temperature,
                     max_new_tokens=args.max_new_tokens,

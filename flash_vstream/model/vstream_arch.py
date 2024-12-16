@@ -646,8 +646,8 @@ class VStreamMetaForCausalLM(ABC):
             image_features = torch.split(image_features, split_sizes, dim=0)  # [B, T, P, D]
         else:
             raise NotImplementedError('Should input video frames, not a single image')
-        image_feature = image_features[0].detach().to(torch.float16).to(self.device)  # [T, P, D]
-        img_feature_buffer = image_feature.cpu()
+        image_feature = image_features[0].detach().to(torch.float16).to(self.device)  # [T, P, D] # detach to avoid backpropagation
+        img_feature_buffer = image_feature.cpu()  # move to cpu
 
         cur_start = min(video_current_memory_length, image_feature.shape[0])
         if cur_start == 0:
