@@ -678,6 +678,7 @@ class VStreamMetaForCausalLM(ABC):
             assert isinstance(old_long_memory_compreesed, torch.Tensor) and old_long_memory_compreesed.shape[1:] == long_memory_compreesed.shape[1:]
             long_memory = torch.cat((old_long_memory_compreesed, long_memory_compreesed), dim=0)
             long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length)  # Temporal Memory  [maxsize=25, 16, 1024]
+            print("long_memory_compreesed.shape=", long_memory_compreesed.shape)  # [maxsize=25, 16, 1024]
             # Retrive key frames
             sorted_indices = torch.argsort(weight, descending=True)  # [L_long]
             key_centroids = long_memory[sorted_indices]  # [L_long, P'*P', D]
@@ -690,6 +691,7 @@ class VStreamMetaForCausalLM(ABC):
             cur_memory = torch.cat([key_memory, cur_memory], dim=0)  # [4, 64, 1024]
             Turing_memory = torch.cat((old_Turing_memory_compreesed, Turing_memory_compreesed), dim=0)
             Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)  # Abstract Memory  [maxsize=25, 1, 1024]
+            print("Turing_memory_compreesed.shape=", Turing_memory_compreesed.shape)  # [maxsize=25, 1, 1024]
         # Write to shared memory, need an I/O lock
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
