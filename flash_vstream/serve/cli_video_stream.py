@@ -146,7 +146,7 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
     sample_fps = round(vr.get_avg_fps() / video_fps)
     frame_idx = [i for i in range(0, len(vr), sample_fps)]
     video = vr.get_batch(frame_idx).asnumpy()
-    video = np.repeat(video, 6, axis=0)
+    video = np.repeat(video, 6, axis=0)  # Repeats each frame n times along the temporal axis, creating a slowed-down version.
     length = video.shape[0]
     sleep_time = 1 / video_fps / play_speed
     time_meter = MetricMeter()
@@ -169,6 +169,50 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
         time.sleep(0.1)
     logger.info(f'Simulator Process: end')
 
+
+
+def video_stream_similator_zzq(video_file, frame_queue, log_queue, video_fps=1.0, play_speed=1.0):
+    # simulates a video streaming process, reading frames from a video file, processing them,
+    # and adding them to a queue (frame_queue) at a specified frame rate
+    ############## Start sub process-2: Simulator #############
+    worker_configurer(log_queue)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+    vr = VideoReader(video_file)  # read the video file
+    sample_fps = round(vr.get_avg_fps() / video_fps)
+    frame_idx = [i for i in range(0, len(vr), sample_fps)]
+    video = vr.get_batch(frame_idx).asnumpy()
+    video = np.repeat(video, 6, axis=0)  # Repeats each frame n times along the temporal axis, creating a slowed-down version.
+    length = video.shape[0]
+    print("video shape = ", video.shape)
+    sleep_time = 1 / video_fps / play_speed
+    time_meter = MetricMeter()
+    logger.info(f'Simulator Process: start, length = {length}')
+    # change the number of frames in each input video clip
+    num_frames_input = 10
+    try:
+        for start in range(0, length):
+            start_time = time.perf_counter()
+            # change the number of frames in each input video clip
+            num_frames_input = 10
+            end = min(start + num_frames_input, length)
+            video_clip = video[start:end]
+            print("video_clip input shape = ", video_clip.shape)
+            frame_queue.put(video_clip)  # put the video clip into the queue
+            if start > 0:
+                time_meter.add('real_sleep', start_time - last_start)
+                logger.info(f'Simulator: write {end - start} frames,\t{start} to {end},\treal_sleep={time_meter["real_sleep"]}')
+            if end < length:
+                time.sleep(sleep_time)
+            last_start = start_time
+        frame_queue.put(None)
+    except Exception as e:
+        print(f'Simulator Exception: {e}')
+        time.sleep(0.1)
+    logger.info(f'Simulator Process: end')
+
+
 def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     ############## Start sub process-3: Memory Manager #############
     worker_configurer(log_queue)
@@ -181,6 +225,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     while True:
         try:
             video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
+            print("video_clip get shape = ", video_clip.shape)
             # FIFO queue, retrieves the oldest element in the queue
             start_time = time.perf_counter()
             if video_clip is None:
@@ -248,7 +293,7 @@ def main(args):
         logger.info(f'Important: set play_speed = {args.play_speed}')
 
         ############## Start simulator process #############
-        p2 = Process(target=video_stream_similator, 
+        p2 = Process(target=video_stream_similator_zzq,
                      args=(args.video_file, frame_queue, log_queue, args.video_fps, args.play_speed))
         processes.append(p2)
         p2.start()

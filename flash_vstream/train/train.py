@@ -866,7 +866,7 @@ def make_supervised_data_module(tokenizer: transformers.PreTrainedTokenizer,
 
 
 def train():
-    global local_rank
+    global local_rank  # 用于标识当前的 GPU/进程编号（在分布式训练中使用）
 
     parser = transformers.HfArgumentParser(
         (ModelArguments, DataArguments, TrainingArguments))

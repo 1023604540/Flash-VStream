@@ -478,7 +478,7 @@ class VStreamMetaForCausalLM(ABC):
         while attempt_times < 300:
             try:
                 with self.video_embedding_mem_lock:
-                    cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_streaming.py
+                    cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
                     image_features = [image_feature.to(self.device)]
@@ -637,7 +637,7 @@ class VStreamMetaForCausalLM(ABC):
         }
         
         if type(images) is list or images.ndim == 5:
-            assert len(images) == 1
+            # assert len(images) == 1
             images = [image if len(image.shape) == 4 else image.unsqueeze(0) for image in images]  # [B, T, C, H, W]  [1, 1, 3, 224, 224]
             concat_images = torch.cat([image for image in images], dim=0)  # [B*T, C, H, W]
             image_features = self.encode_images(concat_images)  # [B*T, P, D] [1, 256, 1024]
