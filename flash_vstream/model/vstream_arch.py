@@ -146,7 +146,7 @@ class VStreamMetaForCausalLM(ABC):
         super(VStreamMetaForCausalLM, self).__init__(config)
         # support video streaming mode
         # load recurrent memory 
-        self.recurrent_memory_transformer = TransformerProjector(self.recurrent_memory_config)
+        self.recurrent_memory_transformer = TransformerProjector()
         self.recurrent_memory = None
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
