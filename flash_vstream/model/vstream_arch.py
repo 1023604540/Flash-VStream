@@ -489,7 +489,7 @@ class VStreamMetaForCausalLM(ABC):
                         image_feature = image_feature.to(self.device)
                         self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                         self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
-                    print("recurrent_memory", self.recurrent_memory.shape)
+                        print("recurrent_memory", self.recurrent_memory.shape)
                     print("cur_memory", cur_memory.shape)
                     print("long_memory_compreesed", long_memory_compreesed.shape)
                     print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
