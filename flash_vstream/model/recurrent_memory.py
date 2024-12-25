@@ -186,7 +186,7 @@ class TransformerLayer(nn.Module):
 
 
 class TransformerProjector(nn.Module):
-    def __init__(self, config=None, read_memories=None):
+    def __init__(self, config=None):
         super().__init__()
         if config is None:
             self.config = Config()  # Use default configuration
@@ -196,7 +196,6 @@ class TransformerProjector(nn.Module):
         #     nn.Linear(config.mm_hidden_size, config.hidden_size),
         #     ACT2FN[config.mm_hidden_act],
         # )
-        self.read_memories = read_memories
         # configuration for memory
         self.num_memory_tokens = self.config.num_memory_tokens
         self.read_memory_emb = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
@@ -221,9 +220,6 @@ class TransformerProjector(nn.Module):
             output_attentions: Optional[bool] = False,
             output_hidden_states: Optional[bool] = False,
     ):
-
-        if read_memories is None and self.read_memories is not None:
-            read_memories = self.read_memories
         # store intermediate results
         all_hidden_states = () if output_hidden_states else None
         all_self_attentions = () if output_attentions else None
