@@ -225,8 +225,8 @@ class TransformerProjector(nn.Module):
         # use cache
         next_cache = () if use_cache else None
 
-        # if not is_image:
-        # set up memories for encoder: memory + x
+
+
         B = hidden_states.shape[0]
         if read_memories is not None:
             if read_memories.ndim == 2:
@@ -297,8 +297,8 @@ depth = 4  # Number of Transformer layers
 model = TransformerProjector(config, depth)
 
 # Define input tensors
-hidden_states = torch.randn(50, 16, 1024)  # [L=50, P=16, D=1024]
-assert hidden_states.shape[2] == config.mm_hidden_size
+hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
+assert hidden_states.shape[-1] == config.mm_hidden_size
 patch_size = hidden_states.shape[1] + config.num_memory_tokens
 encoder_hidden_states = None  # [L=50, P=16, D=1024]
 # attention_mask = torch.zeros((50, 8, 48, 48))  # attentions head = 8
