@@ -185,7 +185,7 @@ class TransformerLayer(nn.Module):
         return outputs
 
 class TransformerProjector(nn.Module):
-    def __init__(self, config, depth):
+    def __init__(self, config, depth = 4):
         super().__init__()
         self.config = config
         self.layers = nn.ModuleList([TransformerLayer(config) for _ in range(depth)])

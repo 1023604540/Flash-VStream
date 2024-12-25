@@ -192,7 +192,7 @@ def video_stream_similator_zzq(video_file, frame_queue, log_queue, video_fps=1.0
     # change the number of frames in each input video clip
     num_frames_input = 1  # default is 1
     try:
-        for start in range(0, length):
+        for start in range(0, length, num_frames_input):
             start_time = time.perf_counter()
             end = min(start + num_frames_input, length)
             video_clip = video[start:end]
@@ -220,8 +220,14 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     time_meter = MetricMeter()
     logger.info(f'MemManager Process: start')
     frame_cnt = 0
+    chunk_length = 25
+    chunk_count = 0
+    chunk_flag = True
     while True:
         try:
+            if chunk_count >= chunk_length:
+                chunk_flag = True
+                chunk_count = 0
             video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
             print("video_clip get shape = ", video_clip.shape)
             # FIFO queue, retrieves the oldest element in the queue
@@ -236,7 +242,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming(image_tensor)  # embed the video clip, create the memory
+                model.embed_video_streaming(image_tensor, chunk_flag)  # embed the video clip, create the memory
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:
@@ -245,6 +251,8 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
             else:
                 logger.info(f'MemManager: embedded {video_clip.shape[0]} frames,\tidx={frame_cnt},\tmemory_latency={end_time - start_time:.6f}, not logged')
             frame_cnt += video_clip.shape[0]
+            chunk_count += video_clip.shape[0]
+            chunk_flag = False
         except Exception as e:
             print(f'MemManager Exception: {e}')
             time.sleep(0.1)
@@ -344,10 +352,10 @@ def main(args):
             streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
 
             llm_start_time = time.perf_counter()
-            with torch.inference_mode():  # disable gradient calculation
+            with torch.inference_mode(): 
                 output_ids = model.generate(
                     input_ids,
-                    images=image_tensor,  # not used, None
+                    images=image_tensor,  
                     do_sample=True if args.temperature > 0 else False,
                     temperature=args.temperature,
                     max_new_tokens=args.max_new_tokens,

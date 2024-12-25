@@ -29,7 +29,7 @@ from flash_vstream.model.multimodal_projector.builder import build_vision_projec
 from flash_vstream.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 
 from flash_vstream.model.compress_functions import drop_feature, merge_feature, kmeans_feature, weighted_kmeans_feature, k_drop_feature, k_merge_feature, attention_feature
-
+from flash_vstream.model.recurrent_memory import TransformerProjector, Config
 
 class NeuralTuringMachine(nn.Module):
     def __init__(self, input_dim=1024, output_dim=1024, attention_dropout=0.1):
@@ -145,6 +145,10 @@ class VStreamMetaForCausalLM(ABC):
     def __init__(self, config):
         super(VStreamMetaForCausalLM, self).__init__(config)
         # support video streaming mode
+        # load recurrent memory 
+        self.recurrent_memory_config = Config()
+        self.recurrent_memory_transformer = TransformerProjector(self.recurrent_memory_config)
+
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
         self.video_embedding_mem_lock = Lock() 
@@ -481,6 +485,8 @@ class VStreamMetaForCausalLM(ABC):
                     cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [n, 1024]
+                    patch_size = image_feature.shape[1] + self.recurrent_memory_config.num_memory_tokens
+
                     print("cur_memory", cur_memory.shape)
                     print("long_memory_compreesed", long_memory_compreesed.shape)
                     print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
@@ -791,10 +797,12 @@ class VStreamMetaForCausalLM(ABC):
     
     def embed_video_streaming(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
         self, 
-        images
+        images,
+        chunk_flag,
     ):
         assert self.use_video_streaming_mode
         logger = logging.getLogger(__name__)
+        self.chunk_flag = chunk_flag
 
         compress_size = getattr(self.config, "compress_size", 1)
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
