@@ -992,7 +992,7 @@ class VStreamMetaForCausalLM(ABC):
             self.chunk_count = chunk_count.copy()
             print("self.chunk_count", self.chunk_count)
             self.chunk_flag = chunk_flag.copy()
-            print("self.chunk_flag", self.chunk_flag)
+            print("self.chunk_flag", chunk_flag)
         return []
 
 
