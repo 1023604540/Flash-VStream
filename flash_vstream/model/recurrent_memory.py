@@ -185,18 +185,21 @@ class TransformerLayer(nn.Module):
         return outputs
 
 class TransformerProjector(nn.Module):
-    def __init__(self, config, depth = 4):
+    def __init__(self, config=None):
         super().__init__()
-        self.config = config
-        self.layers = nn.ModuleList([TransformerLayer(config) for _ in range(depth)])
+        if config is None:
+            self.config = Config()  # Use default configuration
+        # self.config = config
+        self.layers = nn.ModuleList([TransformerLayer(self.config) for _ in range(self.config.depth)])
         # self.proj = nn.Sequential(
         #     nn.Linear(config.mm_hidden_size, config.hidden_size),
         #     ACT2FN[config.mm_hidden_act],
         # )
 
         # configuration for memory
-        self.num_memory_tokens = config.num_memory_tokens
-        self.read_memory_emb = nn.Parameter(torch.randn(self.num_memory_tokens, config.mm_hidden_size))
+        self.num_memory_tokens = self.config.num_memory_tokens
+        self.read_memory_emb = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
+        self.batch_size = None
 
         # self.memory_tokens = nn.Parameter(torch.randn(self.num_memory_tokens, config.mm_hidden_size))
 
@@ -208,7 +211,7 @@ class TransformerProjector(nn.Module):
             self,
             hidden_states: torch.Tensor,
             read_memories: Optional[torch.FloatTensor] = None,
-            attention_mask: Optional[torch.FloatTensor] = None,
+            # attention_mask: Optional[torch.FloatTensor] = None,
             head_mask: Optional[torch.FloatTensor] = None,
             encoder_hidden_states: Optional[torch.FloatTensor] = None,
             encoder_attention_mask: Optional[torch.FloatTensor] = None,
@@ -222,20 +225,28 @@ class TransformerProjector(nn.Module):
         all_self_attentions = () if output_attentions else None
         all_cross_attentions = () if output_attentions and encoder_hidden_states is not None else None
 
+
         # use cache
         next_cache = () if use_cache else None
 
+        assert hidden_states.shape[-1] == self.config.mm_hidden_size  # memory token dimension should match hidden state dimension
+        if hidden_states.ndim == 2:
+            hidden_states = hidden_states.unsqueeze(0)
+            print("hidden_states", hidden_states.shape)
+        assert hidden_states.ndim == 3
 
-
-        B = hidden_states.shape[0]
+        self.batch_size = hidden_states.shape[0]
+        patch_size = hidden_states.shape[-2] + self.config.num_memory_tokens
+        attention_mask = torch.zeros((self.batch_size, self.config.mm_num_attention_heads, patch_size, patch_size))  # attention mask for self-attention
+        attention_mask[:, :, self.num_memory_tokens:, :self.num_memory_tokens] = float('-inf')  # hidden_states can not attend to memory
         if read_memories is not None:
             if read_memories.ndim == 2:
-                read_memories = repeat(read_memories, 'n d -> b n d', b=B)
+                read_memories = repeat(read_memories, 'n d -> b n d', b=self.batch_size)
                 read_mem_length = self.num_memory_tokens
                 read_memories = read_memories + self.read_memory_emb
         else:
             read_mem_length = self.num_memory_tokens
-            read_memories = repeat(self.read_memory_emb, 'n d -> b n d', b=B)
+            read_memories = repeat(self.read_memory_emb, 'n d -> b n d', b=self.batch_size)
         # if attention_mask is not None:
         #     attention_mask = nn.functional.pad(attention_mask, (read_mem_length, self.num_memory_tokens), value=True)
         # TODO: transform encoder_attention_mask
@@ -289,32 +300,34 @@ class Config:
     mm_hidden_dropout_prob = 0.1  # Residual layer dropout
     mm_intermediate_size = 4096  # Feedforward hidden layer size
     num_memory_tokens = 32  # Number of memory tokens
+    depth = 4  # Number of Transformer layers
 
-config = Config()
+# config = Config()
 
 # Instantiate the model
-depth = 4  # Number of Transformer layers
-model = TransformerProjector(config, depth)
+
 
 # Define input tensors
-hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
-assert hidden_states.shape[-1] == config.mm_hidden_size
-patch_size = hidden_states.shape[1] + config.num_memory_tokens
-encoder_hidden_states = None  # [L=50, P=16, D=1024]
+# hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
+# assert hidden_states.shape[-1] == config.mm_hidden_size
+# patch_size = hidden_states.shape[-2] + config.num_memory_tokens
+# encoder_hidden_states = None  # [L=50, P=16, D=1024]
 # attention_mask = torch.zeros((50, 8, 48, 48))  # attentions head = 8
-attention_mask = torch.zeros((50, config.mm_num_attention_heads, patch_size, patch_size))  # [B, P, L, L]
-attention_mask[:, :, config.num_memory_tokens:, :config.num_memory_tokens] = float('-inf')  # hidden_states can not attend to memory
-encoder_attention_mask = None  # No masking for cross-attention
+# attention_mask = torch.zeros((1, config.mm_num_attention_heads, patch_size, patch_size))  # [B, P, L, L]
+# attention_mask[:, :, config.num_memory_tokens:, :config.num_memory_tokens] = float('-inf')  # hidden_states can not attend to memory
+# encoder_attention_mask = None  # No masking for cross-attention
 
-# Forward pass
-output = model(
-    hidden_states=hidden_states,
-    attention_mask=attention_mask,
-    # encoder_hidden_states=encoder_hidden_states,
-    # encoder_attention_mask=encoder_attention_mask,
-)
 
-# Output shapes
-read_memories, hidden_states = output
-
-print("Read Memories:", read_memories.shape)  # [B, num_memory_tokens, config.mm_hidden_size]
+# # Usage
+# # model = TransformerProjector()
+# output = model(
+#     hidden_states=hidden_states,
+#     # attention_mask=attention_mask,
+#     # encoder_hidden_states=encoder_hidden_states,
+#     # encoder_attention_mask=encoder_attention_mask,
+# )
+#
+# # Output shapes
+# read_memories, hidden_states = output
+#
+# print("Read Memories:", read_memories.shape)  # [B, num_memory_tokens, config.mm_hidden_size]
