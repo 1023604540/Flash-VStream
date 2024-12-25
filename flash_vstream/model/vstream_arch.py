@@ -905,10 +905,7 @@ class VStreamMetaForCausalLM(ABC):
         assert self.use_video_streaming_mode
         logger = logging.getLogger(__name__)
 
-        self.chunk_count = chunk_count
-        print("self.chunk_count", self.chunk_count)
-        self.chunk_flag = chunk_flag
-        print("self.chunk_flag", self.chunk_flag)
+
 
         compress_size = getattr(self.config, "compress_size", 1)
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
@@ -991,7 +988,10 @@ class VStreamMetaForCausalLM(ABC):
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-
+            self.chunk_count = chunk_count
+            print("self.chunk_count", self.chunk_count)
+            self.chunk_flag = chunk_flag
+            print("self.chunk_flag", self.chunk_flag)
         return []
 
 
