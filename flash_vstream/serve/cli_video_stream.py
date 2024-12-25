@@ -223,7 +223,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     chunk_flag = False
     while True:
         try:
-            print("chunk_count = ", chunk_count, model.chunk_flag)
+            print("chunk_count = ", chunk_count, model.chunk_flag.value)
             if chunk_count >= chunk_length:
                 chunk_flag = True
                 chunk_count = 0
