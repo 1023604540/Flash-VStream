@@ -479,6 +479,7 @@ class VStreamMetaForCausalLM(ABC):
             return input_ids, position_ids, attention_mask, past_key_values, None, labels
         # Have some tries to avoid deadlock
         attempt_times = 0
+        print("flag_outside", self.chunk_flag)
         while attempt_times < 300:
             try:
                 with self.video_embedding_mem_lock:
