@@ -169,7 +169,7 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
         time.sleep(0.1)
     logger.info(f'Simulator Process: end')
 
-def frame_memory_manager(model, image_processor, frame_queue, log_queue):
+def frame_memory_manager_origin(model, image_processor, frame_queue, log_queue):
     ############## Start sub process-3: Memory Manager #############
     worker_configurer(log_queue)
     logger = logging.getLogger(__name__)
@@ -193,7 +193,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming(image_tensor)  # embed the video clip, create the memory
+                model.embed_video_streaming_origin(image_tensor)  # embed the video clip, create the memory
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:
@@ -208,7 +208,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     logger.info(f'MemManager Process: end')
 
 
-def frame_memory_manager_zzq(model, image_processor, frame_queue, log_queue):
+def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     ############## Start sub process-3: Memory Manager #############
     worker_configurer(log_queue)
     logger = logging.getLogger(__name__)
@@ -239,7 +239,7 @@ def frame_memory_manager_zzq(model, image_processor, frame_queue, log_queue):
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming_zzq(image_tensor, chunk_flag)  # embed the video clip, create the memory
+                model.embed_video_streaming(image_tensor, chunk_flag)  # embed the video clip, create the memory
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:
@@ -304,7 +304,7 @@ def main(args):
         ############## Start memory manager process #############
         # p3 = Process(target=frame_memory_manager, 
         #              args=(model, image_processor, frame_queue, log_queue))
-        p3 = Process(target=frame_memory_manager_zzq, 
+        p3 = Process(target=frame_memory_manager, 
                      args=(model, image_processor, frame_queue, log_queue))
         # Target is the function to be executed in this process, here frame_memory_manager embed the video clip
         processes.append(p3)

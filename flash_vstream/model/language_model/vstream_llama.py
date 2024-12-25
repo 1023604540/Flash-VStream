@@ -76,7 +76,7 @@ class VStreamLlamaForCausalLM(VStreamMetaForCausalLM, LlamaForCausalLM):
                     past_key_values,
                     inputs_embeds,
                     labels
-                ) = self.prepare_inputs_labels_for_multimodal_streaming_zzq(
+                ) = self.prepare_inputs_labels_for_multimodal_streaming(
                     input_ids,
                     position_ids,
                     attention_mask,

@@ -452,7 +452,7 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = None
         return None, position_ids, attention_mask, past_key_values, new_input_embeds, new_labels
 
-    def prepare_inputs_labels_for_multimodal_streaming_zzq(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
+    def prepare_inputs_labels_for_multimodal_streaming(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
         self,
         input_ids,
         position_ids,
@@ -618,7 +618,7 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = None
         return None, position_ids, attention_mask, past_key_values, new_input_embeds, new_labels
 
-    def prepare_inputs_labels_for_multimodal_streaming(
+    def prepare_inputs_labels_for_multimodal_streaming_origin(
             # Asynchronous encoding with a SemLock, only for videos, batch_size=1
             self,
             input_ids,
@@ -795,7 +795,7 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = None
         return None, position_ids, attention_mask, past_key_values, new_input_embeds, new_labels
     
-    def embed_video_streaming(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
+    def embed_video_streaming_origin(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
         self, 
         images,
     ):
@@ -886,7 +886,7 @@ class VStreamMetaForCausalLM(ABC):
 
         return []
     
-    def embed_video_streaming_zzq(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
+    def embed_video_streaming(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
         self, 
         images,
         chunk_flag,
