@@ -232,7 +232,7 @@ class TransformerProjector(nn.Module):
         assert hidden_states.shape[-1] == self.config.mm_hidden_size  # memory token dimension should match hidden state dimension
         if hidden_states.ndim == 2:
             hidden_states = hidden_states.unsqueeze(0)
-            print("hidden_states", hidden_states.shape)
+            #print("hidden_states", hidden_states.shape)
         assert hidden_states.ndim == 3
 
         self.batch_size = hidden_states.shape[0]
@@ -248,7 +248,7 @@ class TransformerProjector(nn.Module):
         #     attention_mask = nn.functional.pad(attention_mask, (read_mem_length, self.num_memory_tokens), value=True)
         # TODO: transform encoder_attention_mask
         assert encoder_attention_mask is None
-        print("before pack", hidden_states.shape)
+        #print("before pack", hidden_states.shape)
         hidden_states, ps = pack([read_memories, hidden_states], 'b * d')  # shape: [B, num_memory_tokens + seq_length, D]
 
         for i, layer in enumerate(self.layers):
@@ -282,6 +282,7 @@ class TransformerProjector(nn.Module):
         #     return proj_hidden_states, read_memories, all_self_attentions, all_cross_attentions
         # else:
         #     return read_memories, hidden_states
+        print("recurrent_run_success")
         return read_memories, hidden_states
 
 
@@ -297,7 +298,7 @@ class Config:
     mm_hidden_dropout_prob = 0.1  # Residual layer dropout
     mm_intermediate_size = 4096  # Feedforward hidden layer size
     num_memory_tokens = 16  # Number of memory tokens
-    depth = 4  # Number of Transformer layers
+    depth = 1  # Number of Transformer layers
 
 # config = Config()
 
