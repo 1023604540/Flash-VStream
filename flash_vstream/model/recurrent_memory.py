@@ -248,9 +248,10 @@ class TransformerProjector(nn.Module):
         #     attention_mask = nn.functional.pad(attention_mask, (read_mem_length, self.num_memory_tokens), value=True)
         # TODO: transform encoder_attention_mask
         assert encoder_attention_mask is None
-        #print("before pack", hidden_states.shape)
-        hidden_states, ps = pack([read_memories, hidden_states], 'b * d')  # shape: [B, num_memory_tokens + seq_length, D]
+        print("before pack", hidden_states.shape)
 
+        hidden_states, ps = pack([read_memories, hidden_states], 'b * d')  # shape: [B, num_memory_tokens + seq_length, D]
+        print("after pack", hidden_states.shape)
         for i, layer in enumerate(self.layers):
             if output_hidden_states: all_hidden_states + (hidden_states,)
             layer_head_mask = head_mask[i] if head_mask is not None else None
@@ -265,7 +266,7 @@ class TransformerProjector(nn.Module):
                 past_key_value,
                 output_attentions,
             )
-
+            print("layer_outputs", layer_outputs[0].shape)
             hidden_states = layer_outputs[0]
             if use_cache:
                 next_cache += (layer_outputs[-1],)
@@ -316,17 +317,17 @@ class Config:
 # encoder_attention_mask = None  # No masking for cross-attention
 
 
-# # Usage
-# hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
-# old_read_memories = torch.randn(1, 16, 1024)  # [B, num_memory_tokens, D]
-# model = TransformerProjector()
-# output = model(
-#     hidden_states=hidden_states,
-#     read_memories=old_read_memories
-#     # encoder_hidden_states=encoder_hidden_states,
-#     # encoder_attention_mask=encoder_attention_mask,
-# )
-#
-# # Output shapes
-# read_memories, hidden_states = output
-# print("Read Memories:", read_memories.shape)  # [B, num_memory_tokens, config.mm_hidden_size]
+# Usage
+hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
+old_read_memories = torch.randn(1, 16, 1024)  # [B, num_memory_tokens, D]
+model = TransformerProjector()
+output = model(
+    hidden_states=hidden_states,
+    read_memories=None
+    # encoder_hidden_states=encoder_hidden_states,
+    # encoder_attention_mask=encoder_attention_mask,
+)
+
+# Output shapes
+read_memories, hidden_states = output
+print("Read Memories:", read_memories.shape)  # [B, num_memory_tokens, config.mm_hidden_size]
