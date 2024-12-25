@@ -700,6 +700,7 @@ class VStreamMetaForCausalLM(ABC):
         return []
 
 
+
     def initialize_vision_tokenizer(self, model_args, tokenizer):
         if model_args.mm_use_im_patch_token:
             tokenizer.add_tokens([DEFAULT_IMAGE_PATCH_TOKEN], special_tokens=True)  # add special image token to vocabulary

@@ -275,3 +275,6 @@ def attention_feature(img_feature, video_max_frames, attention_fn=None, update_r
     cur_feature = turing_memory.reshape(T0, P, D)
     # print(f'Note: perform {attention_fn.__name__} feature {img_feature.shape} to {cur_feature.shape}')
     return cur_feature, None
+
+
+

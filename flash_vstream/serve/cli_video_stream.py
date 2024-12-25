@@ -190,12 +190,10 @@ def video_stream_similator_zzq(video_file, frame_queue, log_queue, video_fps=1.0
     time_meter = MetricMeter()
     logger.info(f'Simulator Process: start, length = {length}')
     # change the number of frames in each input video clip
-    num_frames_input = 10
+    num_frames_input = 1  # default is 1
     try:
         for start in range(0, length):
             start_time = time.perf_counter()
-            # change the number of frames in each input video clip
-            num_frames_input = 10
             end = min(start + num_frames_input, length)
             video_clip = video[start:end]
             print("video_clip input shape = ", video_clip.shape)
