@@ -984,7 +984,7 @@ class VStreamMetaForCausalLM(ABC):
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
             self.chunk_flag = chunk_flag
-            print(self.chunk_flag)git
+            print(self.chunk_flag)
             print(f'Instance ID in embed_video_streaming: {id(self)}')
         return []
 
