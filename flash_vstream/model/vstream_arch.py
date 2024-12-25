@@ -147,7 +147,7 @@ class VStreamMetaForCausalLM(ABC):
         # support video streaming mode
         # load recurrent memory 
         self.recurrent_memory_transformer = TransformerProjector(self.recurrent_memory_config)
-
+        self.recurrent_memory = None
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
         self.video_embedding_mem_lock = Lock() 
@@ -485,7 +485,7 @@ class VStreamMetaForCausalLM(ABC):
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [n, 1024]
                     if self.chunk_flag:
-                        recurrent_memory, _ = self.recurrent_memory_transformer(image_feature)
+                        self.recurrent_memory, _ = self.recurrent_memory_transformer(image_feature, self.recurrent_memory)
                     print("cur_memory", cur_memory.shape)
                     print("long_memory_compreesed", long_memory_compreesed.shape)
                     print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
