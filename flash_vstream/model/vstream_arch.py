@@ -489,7 +489,7 @@ class VStreamMetaForCausalLM(ABC):
                     # if self.chunk_flag:
                     if True:
                         print("flag triggered")
-                        print("recurrent_memory", self.recurrent_memory.shape)
+                        print("recurrent_memory", self.recurrent_memory.shape if self.recurrent_memory is not None else None)
                         image_feature = image_feature.to(self.device)
                         self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                         self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
