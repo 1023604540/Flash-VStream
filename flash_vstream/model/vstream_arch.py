@@ -486,8 +486,10 @@ class VStreamMetaForCausalLM(ABC):
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
                     print("vlm flag", self.chunk_flag)# [n, 1024]
-                    if self.chunk_flag:
+                    # if self.chunk_flag:
+                    if True:
                         print("flag triggered")
+                        print("recurrent_memory", self.recurrent_memory.shape)
                         image_feature = image_feature.to(self.device)
                         self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                         self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
