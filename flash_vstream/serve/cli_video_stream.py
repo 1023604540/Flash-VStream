@@ -302,7 +302,9 @@ def main(args):
         p2.start()
 
         ############## Start memory manager process #############
-        p3 = Process(target=frame_memory_manager, 
+        # p3 = Process(target=frame_memory_manager, 
+        #              args=(model, image_processor, frame_queue, log_queue))
+        p3 = Process(target=frame_memory_manager_zzq, 
                      args=(model, image_processor, frame_queue, log_queue))
         # Target is the function to be executed in this process, here frame_memory_manager embed the video clip
         processes.append(p3)

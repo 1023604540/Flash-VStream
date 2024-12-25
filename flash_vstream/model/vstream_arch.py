@@ -486,6 +486,7 @@ class VStreamMetaForCausalLM(ABC):
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [n, 1024]
                     if self.chunk_flag:
                         self.recurrent_memory, _ = self.recurrent_memory_transformer(image_feature, self.recurrent_memory)
+                    print("recurrent_memory", self.recurrent_memory.shape)
                     print("cur_memory", cur_memory.shape)
                     print("long_memory_compreesed", long_memory_compreesed.shape)
                     print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
