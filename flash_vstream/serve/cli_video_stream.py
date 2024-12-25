@@ -290,6 +290,7 @@ def main(args):
         image_tensor = None
         model.use_video_streaming_mode = True
         model.video_embedding_memory = manager.list()  # Creates a shared, synchronized object across processes, here to store the video clip embeddings
+        model.chunk_flag = manager.Value('b', False)
         if args.video_max_frames is not None:
             model.config.video_max_frames = args.video_max_frames
             logger.info(f'Important: set model.config.video_max_frames = {model.config.video_max_frames}')
