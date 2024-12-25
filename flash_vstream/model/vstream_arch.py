@@ -899,6 +899,7 @@ class VStreamMetaForCausalLM(ABC):
         logger = logging.getLogger(__name__)
 
         self.chunk_flag = chunk_flag
+        print("self.chunk_flag", self.chunk_flag)
 
         compress_size = getattr(self.config, "compress_size", 1)
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
