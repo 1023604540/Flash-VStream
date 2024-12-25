@@ -219,7 +219,7 @@ def frame_memory_manager_zzq(model, image_processor, frame_queue, log_queue):
     frame_cnt = 0
     chunk_length = 25
     chunk_count = 0
-    chunk_flag = True
+    chunk_flag = False  
     while True:
         try:
             if chunk_count >= chunk_length:
