@@ -248,14 +248,12 @@ class TransformerProjector(nn.Module):
         #     attention_mask = nn.functional.pad(attention_mask, (read_mem_length, self.num_memory_tokens), value=True)
         # TODO: transform encoder_attention_mask
         assert encoder_attention_mask is None
-        print("before pack", hidden_states.shape)
         # ensure hidden_states and read_memories are on the same device
         device = hidden_states.device
         read_memories = read_memories.to(device)
         attention_mask = attention_mask.to(device)
 
         hidden_states, ps = pack([read_memories, hidden_states], 'b * d')  # shape: [B, num_memory_tokens + seq_length, D]
-        print("after pack", hidden_states.shape)
         for i, layer in enumerate(self.layers):
             if output_hidden_states: all_hidden_states + (hidden_states,)
             layer_head_mask = head_mask[i] if head_mask is not None else None
@@ -270,7 +268,7 @@ class TransformerProjector(nn.Module):
                 past_key_value,
                 output_attentions,
             )
-            print("layer_outputs", layer_outputs[0].shape)
+
             hidden_states = layer_outputs[0]
             if use_cache:
                 next_cache += (layer_outputs[-1],)
