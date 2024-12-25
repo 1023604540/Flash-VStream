@@ -252,6 +252,7 @@ class TransformerProjector(nn.Module):
         # ensure hidden_states and read_memories are on the same device
         device = hidden_states.device
         read_memories = read_memories.to(device)
+        attention_mask = attention_mask.to(device)
 
         hidden_states, ps = pack([read_memories, hidden_states], 'b * d')  # shape: [B, num_memory_tokens + seq_length, D]
         print("after pack", hidden_states.shape)
