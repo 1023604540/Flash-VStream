@@ -483,17 +483,14 @@ class VStreamMetaForCausalLM(ABC):
             return input_ids, position_ids, attention_mask, past_key_values, None, labels
         # Have some tries to avoid deadlock
         attempt_times = 0
-        print("chunk count in def", self.chunk_count)
         while attempt_times < 300:
             try:
                 with self.video_embedding_mem_lock:
                     cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
-                    # if self.chunk_flag:
-                    if True:
+                    if self.chunk_flag:
                         print("flag triggered")
-                        print("recurrent_memory", self.recurrent_memory.shape if self.recurrent_memory is not None else None)
                         image_feature = image_feature.to(self.device)
                         self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                         self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
@@ -901,13 +898,9 @@ class VStreamMetaForCausalLM(ABC):
         self, 
         images,
         chunk_flag,
-        chunk_count,
     ):
         assert self.use_video_streaming_mode
         logger = logging.getLogger(__name__)
-
-
-
         compress_size = getattr(self.config, "compress_size", 1)
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
         video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
@@ -989,13 +982,8 @@ class VStreamMetaForCausalLM(ABC):
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-            self.chunk_count = chunk_count.copy()
-            print("self.chunk_count", self.chunk_count)
-            self.chunk_flag = chunk_flag.copy()
-            print("self.chunk_flag", chunk_flag)
+            self.chunk_flag = chunk_flag
         return []
-
-
 
     def initialize_vision_tokenizer(self, model_args, tokenizer):
         if model_args.mm_use_im_patch_token:
