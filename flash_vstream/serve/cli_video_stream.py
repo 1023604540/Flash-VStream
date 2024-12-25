@@ -239,7 +239,7 @@ def frame_memory_manager_zzq(model, image_processor, frame_queue, log_queue):
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming(image_tensor, chunk_flag)  # embed the video clip, create the memory
+                model.embed_video_streaming_zzq(image_tensor, chunk_flag)  # embed the video clip, create the memory
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:

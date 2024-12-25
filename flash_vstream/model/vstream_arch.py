@@ -798,12 +798,104 @@ class VStreamMetaForCausalLM(ABC):
     def embed_video_streaming(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
         self, 
         images,
+    ):
+        assert self.use_video_streaming_mode
+        logger = logging.getLogger(__name__)
+
+        compress_size = getattr(self.config, "compress_size", 1)
+        video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
+        video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
+        video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
+        video_current_memory_length = getattr(self.config, "video_current_memory_length", 1)
+        compress_long_memory_size = getattr(self.config, "compress_long_memory_size", 1)
+        compress_Turing_memory_size = getattr(self.config, "compress_Turing_memory_size", 1)
+        compress_Turing_update_ratio = getattr(self.config, "compress_Turing_update_ratio", 0.2)
+        compress_fn_dic = {
+            'drop': drop_feature,
+            'merge': merge_feature,
+            'kmeans': kmeans_feature,
+            'weighted_kmeans': weighted_kmeans_feature,
+            'kdrop': k_drop_feature,
+            'kmerge': k_merge_feature,
+            'uni_kmerge': k_merge_feature,
+            'both_kmerge': k_merge_feature,
+            'split_kmerge': k_merge_feature,
+            'attention': attention_feature,
+        }
+        
+        if type(images) is list or images.ndim == 5:
+            # assert len(images) == 1
+            images = [image if len(image.shape) == 4 else image.unsqueeze(0) for image in images]  # [B, T, C, H, W]  [1, 1, 3, 224, 224]
+            concat_images = torch.cat([image for image in images], dim=0)  # [B*T, C, H, W]
+            image_features = self.encode_images(concat_images)  # [B*T, P, D] [1, 256, 1024]
+            image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D] [1, 64, 1024]
+            split_sizes = [image.shape[0] for image in images]
+            image_features = torch.split(image_features, split_sizes, dim=0)  # [B, T, P, D] [1, 1, 64, 1024]
+        else:
+            raise NotImplementedError('Should input video frames, not a single image')
+        image_feature = image_features[0].detach().to(torch.float16).to(self.device)  # [T, P, D] [1, 64, 1024] # detach to avoid backpropagation
+        img_feature_buffer = image_feature.cpu()  # move to cpu
+
+        cur_start = min(video_current_memory_length, image_feature.shape[0])
+        if cur_start == 0:
+            cur_memory = image_feature[:0]
+        else:
+            cur_memory = image_feature[-cur_start:]  # Spatial Memory # [L_c, P*P, D] [1, 64,1024]
+        long_memory = image_feature
+        Turing_memory = image_feature
+        if compress_long_memory_size * compress_long_memory_size != long_memory.shape[1]:
+            long_memory = self.compress_spatial_features(long_memory, compress_long_memory_size) # [L_l, P'*P', D]
+        if compress_Turing_memory_size * compress_Turing_memory_size != Turing_memory.shape[1]:
+            Turing_memory = self.compress_spatial_features(Turing_memory, compress_Turing_memory_size) # [L_t, P'*P', D]
+        compress_type = self.config.video_sample_type
+        if compress_type in compress_fn_dic:
+            compress_fn = compress_fn_dic[compress_type]
+        else:
+            raise NotImplementedError(f'max_length = {self.config.video_max_frames},'
+                                        f'while video_sample_type = {compress_type} is not supported yet.')
+        long_memory_compreesed = long_memory  # [1, 16, 1024]
+        Turing_memory_compreesed = Turing_memory  # [1, 1, 1024]
+        # Read old memory from shared memory, do not need an I/O lock
+        if self.video_embedding_memory is not None and len(self.video_embedding_memory) > 0:
+            old_cur_memory, old_long_memory_compreesed, old_Turing_memory_compreesed, old_img_feature_buffer = self.video_embedding_memory
+            old_long_memory_compreesed = old_long_memory_compreesed.to(self.device)
+            old_Turing_memory_compreesed = old_Turing_memory_compreesed.to(self.device)
+            img_feature_buffer = torch.cat([old_img_feature_buffer, image_feature.cpu()], dim=0)  # Feature Buffer [n, 64, 1024]
+            # print("img_feature_buffer.shape=", img_feature_buffer.shape)  # [n, 64, 1024]
+            assert isinstance(old_long_memory_compreesed, torch.Tensor) and old_long_memory_compreesed.shape[1:] == long_memory_compreesed.shape[1:]
+            long_memory = torch.cat((old_long_memory_compreesed, long_memory_compreesed), dim=0)
+            long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length)  # Temporal Memory  [maxsize=25, 16, 1024]
+            # print("long_memory_compreesed.shape=", long_memory_compreesed.shape)  # [maxsize=25, 16, 1024]
+            # Retrive key frames
+            sorted_indices = torch.argsort(weight, descending=True)  # [L_long]
+            key_centroids = long_memory[sorted_indices]  # [L_long, P'*P', D]
+            key_length = 3
+            if key_centroids.shape[0] > key_length:
+                key_centroids = key_centroids[:key_length]  # Select top-3 largest clusters
+            dists = ((long_memory.unsqueeze(1) - key_centroids.unsqueeze(0)) ** 2).sum(dim=3).sum(dim=2).sqrt()  # [L_long, k_L]
+            min_indices = torch.argmin(dists, dim=0)  # [k_L]
+            key_memory = img_feature_buffer[min_indices.cpu()].to(self.device)  # Retrieved Memory  [3, 64, 1024]
+            cur_memory = torch.cat([key_memory, cur_memory], dim=0)  # [4, 64, 1024]
+            Turing_memory = torch.cat((old_Turing_memory_compreesed, Turing_memory_compreesed), dim=0)
+            Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)  # Abstract Memory  [maxsize=25, 1, 1024]
+            # print("Turing_memory_compreesed.shape=", Turing_memory_compreesed.shape)  # [maxsize=25, 1, 1024]
+        # Write to shared memory, need an I/O lock
+        with self.video_embedding_mem_lock:
+            self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
+            logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
+
+        return []
+    
+    def embed_video_streaming_zzq(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
+        self, 
+        images,
         chunk_flag,
     ):
         assert self.use_video_streaming_mode
         logger = logging.getLogger(__name__)
-        self.chunk_flag = chunk_flag
 
+        self.chunk_flag = chunk_flag
+        
         compress_size = getattr(self.config, "compress_size", 1)
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
         video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
