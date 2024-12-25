@@ -465,6 +465,7 @@ class VStreamMetaForCausalLM(ABC):
         past_key_values,
         labels
     ):
+        print("chunk_flag in streaming ", self.chunk_flag)
         assert self.use_video_streaming_mode
         logger = logging.getLogger(__name__)
         vision_tower = self.get_vision_tower()
@@ -487,7 +488,6 @@ class VStreamMetaForCausalLM(ABC):
             try:
                 with self.video_embedding_mem_lock:
                     cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
-                    print(f'Instance ID in prepare_inputs_labels_for_multimodal_streaming: {id(self)}')
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
                     if self.chunk_flag:
