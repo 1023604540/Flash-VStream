@@ -219,14 +219,16 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     frame_cnt = 0
     chunk_length = 25
     chunk_count = 0
-    chunk_flag = False  
+    # chunk_flag = False
+    chunk_flag = False
     while True:
         try:
+            print("chunk_count = ", chunk_count, model.chunk_flag)
             if chunk_count >= chunk_length:
                 chunk_flag = True
                 chunk_count = 0
             video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
-            print("video_clip get shape = ", video_clip.shape)
+            # print("video_clip get shape = ", video_clip.shape)
             # FIFO queue, retrieves the oldest element in the queue
             start_time = time.perf_counter()
             if video_clip is None:
@@ -249,7 +251,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
                 logger.info(f'MemManager: embedded {video_clip.shape[0]} frames,\tidx={frame_cnt},\tmemory_latency={end_time - start_time:.6f}, not logged')
             frame_cnt += video_clip.shape[0]
             chunk_count += video_clip.shape[0]
-            chunk_flag = False
+            chunk_flag = True
         except Exception as e:
             print(f'MemManager Exception: {e}')
             time.sleep(0.1)
