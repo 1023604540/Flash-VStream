@@ -64,6 +64,7 @@ class NeuralTuringMachine(nn.Module):
         output = self.out_ln(output.unsqueeze(0)).squeeze(0)
         return output
 
+num_instances = 0
 
 class VStreamMetaModel:
 
@@ -142,6 +143,8 @@ class VStreamMetaModel:
 
 class VStreamMetaForCausalLM(ABC):
 
+    INSTANCE_COUNT = 0
+
     def __init__(self, config):
         super(VStreamMetaForCausalLM, self).__init__(config)
         # support video streaming mode
@@ -151,7 +154,9 @@ class VStreamMetaForCausalLM(ABC):
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
         self.chunk_flag = False
-        self.video_embedding_mem_lock = Lock() 
+        self.video_embedding_mem_lock = Lock()
+        VStreamMetaForCausalLM.INSTANCE_COUNT += 1
+        print(f"VStreamMetaForCausalLM instance count: {VStreamMetaForCausalLM.INSTANCE_COUNT}")
 
     @abstractmethod
     def get_model(self):
