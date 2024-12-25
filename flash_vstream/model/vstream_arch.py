@@ -150,6 +150,7 @@ class VStreamMetaForCausalLM(ABC):
         self.recurrent_memory = None
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
+        self.chunk_flag = False
         self.video_embedding_mem_lock = Lock() 
 
     @abstractmethod
