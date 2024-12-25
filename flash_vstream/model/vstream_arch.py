@@ -983,7 +983,7 @@ class VStreamMetaForCausalLM(ABC):
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-            self.chunk_flag = chunk_flag
+            self.chunk_flag.value = chunk_flag
             print("chunk_flag in emdding", self.chunk_flag)
         return []
 
