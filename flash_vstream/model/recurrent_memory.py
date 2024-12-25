@@ -185,7 +185,7 @@ class TransformerLayer(nn.Module):
         return outputs
 
 class TransformerProjector(nn.Module):
-    def __init__(self, config=None):
+    def __init__(self, config=None, read_memories=None):
         super().__init__()
         if config is None:
             self.config = Config()  # Use default configuration
@@ -242,10 +242,7 @@ class TransformerProjector(nn.Module):
         if read_memories is not None:
             if read_memories.ndim == 2:
                 read_memories = repeat(read_memories, 'n d -> b n d', b=self.batch_size)
-                read_mem_length = self.num_memory_tokens
-                read_memories = read_memories + self.read_memory_emb
         else:
-            read_mem_length = self.num_memory_tokens
             read_memories = repeat(self.read_memory_emb, 'n d -> b n d', b=self.batch_size)
         # if attention_mask is not None:
         #     attention_mask = nn.functional.pad(attention_mask, (read_mem_length, self.num_memory_tokens), value=True)
@@ -299,7 +296,7 @@ class Config:
     mm_layer_norm_eps = 1e-12  # LayerNorm epsilon (avoid div by zero)
     mm_hidden_dropout_prob = 0.1  # Residual layer dropout
     mm_intermediate_size = 4096  # Feedforward hidden layer size
-    num_memory_tokens = 32  # Number of memory tokens
+    num_memory_tokens = 16  # Number of memory tokens
     depth = 4  # Number of Transformer layers
 
 # config = Config()
@@ -308,7 +305,7 @@ class Config:
 
 
 # Define input tensors
-# hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
+
 # assert hidden_states.shape[-1] == config.mm_hidden_size
 # patch_size = hidden_states.shape[-2] + config.num_memory_tokens
 # encoder_hidden_states = None  # [L=50, P=16, D=1024]
@@ -319,15 +316,16 @@ class Config:
 
 
 # # Usage
-# # model = TransformerProjector()
+# hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
+# old_read_memories = torch.randn(1, 16, 1024)  # [B, num_memory_tokens, D]
+# model = TransformerProjector()
 # output = model(
 #     hidden_states=hidden_states,
-#     # attention_mask=attention_mask,
+#     read_memories=old_read_memories
 #     # encoder_hidden_states=encoder_hidden_states,
 #     # encoder_attention_mask=encoder_attention_mask,
 # )
 #
 # # Output shapes
 # read_memories, hidden_states = output
-#
 # print("Read Memories:", read_memories.shape)  # [B, num_memory_tokens, config.mm_hidden_size]
