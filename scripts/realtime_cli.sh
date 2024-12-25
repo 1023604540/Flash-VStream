@@ -7,3 +7,4 @@ python -m flash_vstream.serve.cli_video_stream \
     --video_max_frames 1200 \
     --video_fps 1.0 --play_speed 1.0 \
     --log-file realtime_cli.log
+
