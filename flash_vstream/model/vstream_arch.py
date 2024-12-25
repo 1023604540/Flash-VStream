@@ -30,6 +30,7 @@ from flash_vstream.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMA
 
 from flash_vstream.model.compress_functions import drop_feature, merge_feature, kmeans_feature, weighted_kmeans_feature, k_drop_feature, k_merge_feature, attention_feature
 from flash_vstream.model.recurrent_memory import TransformerProjector
+import copy
 
 class NeuralTuringMachine(nn.Module):
     def __init__(self, input_dim=1024, output_dim=1024, attention_dropout=0.1):
@@ -988,9 +989,9 @@ class VStreamMetaForCausalLM(ABC):
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-            self.chunk_count = chunk_count
+            self.chunk_count = chunk_count.copy()
             print("self.chunk_count", self.chunk_count)
-            self.chunk_flag = chunk_flag
+            self.chunk_flag = chunk_flag.copy()
             print("self.chunk_flag", self.chunk_flag)
         return []
 
