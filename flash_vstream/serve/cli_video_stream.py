@@ -216,18 +216,10 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     worker_configurer(log_queue)
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-
     time_meter = MetricMeter()
     logger.info(f'MemManager Process: start')
-    frame_cnt = 0
-    chunk_length = 25
-    chunk_count = 0
-    chunk_flag = True
     while True:
         try:
-            if chunk_count >= chunk_length:
-                chunk_flag = True
-                chunk_count = 0
             video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
             print("video_clip get shape = ", video_clip.shape)
             # FIFO queue, retrieves the oldest element in the queue
@@ -242,7 +234,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
             # time_2 = time.perf_counter()
             logger.info(f'MemManager: Start embedding')
             with torch.inference_mode():
-                model.embed_video_streaming(image_tensor, chunk_flag)  # embed the video clip, create the memory
+                model.embed_video_streaming(image_tensor)  # embed the video clip, create the memory
             logger.info(f'MemManager: End embedding')
             end_time = time.perf_counter()
             if frame_cnt > 0:
@@ -251,8 +243,6 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
             else:
                 logger.info(f'MemManager: embedded {video_clip.shape[0]} frames,\tidx={frame_cnt},\tmemory_latency={end_time - start_time:.6f}, not logged')
             frame_cnt += video_clip.shape[0]
-            chunk_count += video_clip.shape[0]
-            chunk_flag = False
         except Exception as e:
             print(f'MemManager Exception: {e}')
             time.sleep(0.1)
