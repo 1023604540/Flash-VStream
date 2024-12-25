@@ -226,7 +226,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
                 chunk_flag = True
                 chunk_count = 0
             video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
-            print("video_clip get shape = ", video_clip.shape)
+            # print("video_clip get shape = ", video_clip.shape)
             # FIFO queue, retrieves the oldest element in the queue
             start_time = time.perf_counter()
             if video_clip is None:
