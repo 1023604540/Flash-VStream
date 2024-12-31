@@ -496,7 +496,7 @@ class VStreamMetaForCausalLM(ABC):
                     if recurrent_memory == None:
                         image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [681, 1024] without recurrent_memory
                     else:
-                        image_feature = torch.cat([recurrent_memory.flatten(0, 1), Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
+                        image_feature = torch.cat([recurrent_memory.flatten(0, 1), Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)  # include recurrent_memory
                     # if self.chunk_flag.value:
                     #     print("flag triggered")
                     #     image_feature = image_feature.to(self.device)
