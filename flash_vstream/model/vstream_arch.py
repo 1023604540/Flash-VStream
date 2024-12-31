@@ -152,6 +152,7 @@ class VStreamMetaForCausalLM(ABC):
         # load recurrent memory 
         self.recurrent_memory_transformer = TransformerProjector()
         self.recurrent_memory = None
+        self.r_memory = None
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
         self.video_embedding_mem_lock = Lock()
@@ -488,7 +489,6 @@ class VStreamMetaForCausalLM(ABC):
                     cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
-                    print("chunk_flag in streaming ", self.chunk_flag.value)
                     # if self.chunk_flag.value:
                     #     print("flag triggered")
                     #     image_feature = image_feature.to(self.device)
@@ -980,21 +980,15 @@ class VStreamMetaForCausalLM(ABC):
             # print("Turing_memory_compreesed.shape=", Turing_memory_compreesed.shape)  # [maxsize=25, 1, 1024]
         # Write to shared memory, need an I/O lock
         with self.video_embedding_mem_lock:
-            self.video_embedding_memory[:] = [cur_memory.cpu().numpy(), long_memory_compreesed.cpu().numpy(), Turing_memory_compreesed.cpu().numpy(), img_feature_buffer]  # Only change content
+            self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-            
-            # 将 NumPy 数组转换回 PyTorch 张量
-            cur_memory = torch.tensor(self.video_embedding_memory[0])
-            long_memory_compreesed = torch.tensor(self.video_embedding_memory[1])
-            Turing_memory_compreesed = torch.tensor(self.video_embedding_memory[2])
-            
             image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
             
             if chunk_flag:
                 image_feature = image_feature.to(self.device)
                 self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
-                self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
-                self.recurrent_memory[:] = self.recurrent_memory.cpu().numpy()  # 将张量转换为 NumPy 数组并存储
+                self.r_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.r_memory)
+                self.recurrent_memory[:] = [self.r_memory.cpu()]  # 将张量转换为 NumPy 数组并存储
         return []
 
     def initialize_vision_tokenizer(self, model_args, tokenizer):
