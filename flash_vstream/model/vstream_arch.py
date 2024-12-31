@@ -506,8 +506,9 @@ class VStreamMetaForCausalLM(ABC):
                     # print("cur_memory", cur_memory.shape)
                     # print("long_memory_compreesed", long_memory_compreesed.shape)
                     # print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
-                    # print(f'Prepare inputs for multimodal streaming, image_feature={image_feature.shape} {image_feature.dtype}')
                     image_feature = image_feature[:681, :]
+                    print(f'Prepare inputs for multimodal streaming, image_feature={image_feature.shape} {image_feature.dtype}')
+
                     image_features = [image_feature.to(self.device)]
                     break
                     
