@@ -91,9 +91,9 @@ class Attention(nn.Module):
         # TODO position encoding
 
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)
-        print("with memory token, hidden_state = ", hidden_states.shape)
-        print("attention_scores", attention_scores.shape)
-        print("attention mask", attention_mask.shape)
+        # print("with memory token, hidden_state = ", hidden_states.shape)
+        # print("attention_scores", attention_scores.shape)
+        # print("attention mask", attention_mask.shape)
         if attention_mask is not None:
             attention_scores += attention_mask
 
