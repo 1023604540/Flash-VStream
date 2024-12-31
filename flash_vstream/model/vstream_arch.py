@@ -15,6 +15,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from email.mime import image
 import time
 import math
 import logging
@@ -153,8 +154,6 @@ class VStreamMetaForCausalLM(ABC):
         self.recurrent_memory = None
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
-        self.chunk_flag = False
-        self.chunk_count = None
         self.video_embedding_mem_lock = Lock()
 
     @abstractmethod
@@ -490,12 +489,13 @@ class VStreamMetaForCausalLM(ABC):
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
                     print("chunk_flag in streaming ", self.chunk_flag.value)
-                    if self.chunk_flag.value:
-                        print("flag triggered")
-                        image_feature = image_feature.to(self.device)
-                        self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
-                        self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
-                        print("recurrent_memory", self.recurrent_memory.shape)
+                    # if self.chunk_flag.value:
+                    #     print("flag triggered")
+                    #     image_feature = image_feature.to(self.device)
+                    #     self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
+                    #     self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
+                    #     print("recurrent_memory", self.recurrent_memory.shape)
+                    
                     print("cur_memory", cur_memory.shape)
                     print("long_memory_compreesed", long_memory_compreesed.shape)
                     print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
@@ -983,8 +983,12 @@ class VStreamMetaForCausalLM(ABC):
         with self.video_embedding_mem_lock:
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-            self.chunk_flag.value = chunk_flag
-            print("chunk_flag in emdding", self.chunk_flag.value)
+            image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
+            if chunk_flag:
+                image_feature = image_feature.to(self.device)
+                self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
+                self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
+                self.recurrent_memory[:] = self.recurrent_memory.cpu()
         return []
 
     def initialize_vision_tokenizer(self, model_args, tokenizer):

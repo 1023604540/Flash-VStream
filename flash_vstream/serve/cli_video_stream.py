@@ -219,11 +219,9 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     frame_cnt = 0
     chunk_length = 25
     chunk_count = 0
-    # chunk_flag = False
     chunk_flag = False
     while True:
         try:
-            print("chunk_count = ", chunk_count, model.chunk_flag.value)
             if chunk_count >= chunk_length:
                 chunk_flag = True
                 chunk_count = 0
@@ -290,7 +288,8 @@ def main(args):
         image_tensor = None
         model.use_video_streaming_mode = True
         model.video_embedding_memory = manager.list()  # Creates a shared, synchronized object across processes, here to store the video clip embeddings
-        model.chunk_flag = manager.Value('b', False)
+        model.recurrent_memory = manager.list() 
+        # model.chunk_flag = manager.Value('b', False)
         if args.video_max_frames is not None:
             model.config.video_max_frames = args.video_max_frames
             logger.info(f'Important: set model.config.video_max_frames = {model.config.video_max_frames}')
