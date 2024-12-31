@@ -983,12 +983,14 @@ class VStreamMetaForCausalLM(ABC):
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
             image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
-            
+
             if chunk_flag:
+                print("flag triggered")
                 image_feature = image_feature.to(self.device)
                 self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                 self.r_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.r_memory)
                 self.recurrent_memory[:] = [self.r_memory.cpu()]  # 将张量转换为 NumPy 数组并存储
+                print("recurrent_memory", self.r_memory.shape)
         return []
 
     def initialize_vision_tokenizer(self, model_args, tokenizer):

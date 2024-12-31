@@ -249,6 +249,7 @@ def frame_memory_manager(model, image_processor, frame_queue, log_queue):
                 logger.info(f'MemManager: embedded {video_clip.shape[0]} frames,\tidx={frame_cnt},\tmemory_latency={end_time - start_time:.6f}, not logged')
             frame_cnt += video_clip.shape[0]
             chunk_count += video_clip.shape[0]
+            print("chunk_count = ", chunk_count, "chunk_flag = ", chunk_flag)
             chunk_flag = False
         except Exception as e:
             print(f'MemManager Exception: {e}')
