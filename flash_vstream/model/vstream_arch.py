@@ -488,10 +488,10 @@ class VStreamMetaForCausalLM(ABC):
                 with self.video_embedding_mem_lock:
                     cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
                     recurrent_memory = self.recurrent_memory[0] if len(self.recurrent_memory) != 0 else None
-                    if recurrent_memory == None:
-                        print("recurrent_memory is None")
-                    else:
-                        print("recurrent_memory", recurrent_memory.shape)
+                    # if recurrent_memory == None:
+                    #     print("recurrent_memory is None")
+                    # else:
+                    #     print("recurrent_memory", recurrent_memory.shape)
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
                     if recurrent_memory == None:
                         image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [681, 1024] without recurrent_memory
@@ -506,7 +506,7 @@ class VStreamMetaForCausalLM(ABC):
                     # print("cur_memory", cur_memory.shape)
                     # print("long_memory_compreesed", long_memory_compreesed.shape)
                     # print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
-                    print(f'Prepare inputs for multimodal streaming, image_feature={image_feature.shape} {image_feature.dtype}')
+                    # print(f'Prepare inputs for multimodal streaming, image_feature={image_feature.shape} {image_feature.dtype}')
                     image_features = [image_feature.to(self.device)]
                     break
                     
