@@ -493,16 +493,19 @@ class VStreamMetaForCausalLM(ABC):
                     else:
                         print("recurrent_memory", recurrent_memory.shape)
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-                    image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
+                    if recurrent_memory == None:
+                        image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [681, 1024] without recurrent_memory
+                    else:
+                        image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
                     # if self.chunk_flag.value:
                     #     print("flag triggered")
                     #     image_feature = image_feature.to(self.device)
                     #     self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                     #     self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
                     #     print("recurrent_memory", self.recurrent_memory.shape)
-                    print("cur_memory", cur_memory.shape)
-                    print("long_memory_compreesed", long_memory_compreesed.shape)
-                    print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
+                    # print("cur_memory", cur_memory.shape)
+                    # print("long_memory_compreesed", long_memory_compreesed.shape)
+                    # print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
                     print(f'Prepare inputs for multimodal streaming, image_feature={image_feature.shape} {image_feature.dtype}')
                     image_features = [image_feature.to(self.device)]
                     break
