@@ -487,18 +487,28 @@ class VStreamMetaForCausalLM(ABC):
             try:
                 with self.video_embedding_mem_lock:
                     cur_memory, long_memory_compreesed, Turing_memory_compreesed, _ = self.video_embedding_memory   # for streaming mode, input is processed by cli_video_stream.py
+                    recurrent_memory = self.recurrent_memory[0] if len(self.recurrent_memory) != 0 else None
+                    # if recurrent_memory == None:
+                    #     print("recurrent_memory is None")
+                    # else:
+                    #     print("recurrent_memory", recurrent_memory.shape)
                     logger.info(f'Read cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
-                    image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
+                    if recurrent_memory == None:
+                        image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)  # [681, 1024] without recurrent_memory
+                    else:
+                        image_feature = torch.cat([recurrent_memory.flatten(0, 1), Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)  # include recurrent_memory
                     # if self.chunk_flag.value:
                     #     print("flag triggered")
                     #     image_feature = image_feature.to(self.device)
                     #     self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                     #     self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.recurrent_memory)
                     #     print("recurrent_memory", self.recurrent_memory.shape)
-                    print("cur_memory", cur_memory.shape)
-                    print("long_memory_compreesed", long_memory_compreesed.shape)
-                    print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
+                    # print("cur_memory", cur_memory.shape)
+                    # print("long_memory_compreesed", long_memory_compreesed.shape)
+                    # print("Turing_memory_compreesed", Turing_memory_compreesed.shape)
+                    image_feature = image_feature[:681, :]
                     print(f'Prepare inputs for multimodal streaming, image_feature={image_feature.shape} {image_feature.dtype}')
+
                     image_features = [image_feature.to(self.device)]
                     break
                     
@@ -983,12 +993,14 @@ class VStreamMetaForCausalLM(ABC):
             self.video_embedding_memory[:] = [cur_memory.cpu(), long_memory_compreesed.cpu(), Turing_memory_compreesed.cpu(), img_feature_buffer]  # Only change content
             logger.info(f'Write cur_memory={cur_memory.shape} {cur_memory.dtype}, long_memory_compreesed={long_memory_compreesed.shape} {long_memory_compreesed.dtype}, Turing_memory_compreesed={Turing_memory_compreesed.shape} {Turing_memory_compreesed.dtype}')
             image_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
-            
+
             if chunk_flag:
+                print("flag triggered")
                 image_feature = image_feature.to(self.device)
                 self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                 self.r_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.r_memory)
                 self.recurrent_memory[:] = [self.r_memory.cpu()]  # 将张量转换为 NumPy 数组并存储
+                print("recurrent_memory", self.r_memory.shape)
         return []
 
     def initialize_vision_tokenizer(self, model_args, tokenizer):
