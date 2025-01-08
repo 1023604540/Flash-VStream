@@ -525,7 +525,7 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = None
         return None, position_ids, attention_mask, past_key_values, new_input_embeds, new_labels
 
-    def prepare_inputs_labels_for_multimodal_streaming(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
+    def prepare_inputs_labels_for_multimodal_streaming_modified(  # Asynchronous encoding with a SemLock, only for videos, batch_size=1
         self,
         input_ids,
         position_ids,
@@ -704,7 +704,7 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = None
         return None, position_ids, attention_mask, past_key_values, new_input_embeds, new_labels
 
-    def prepare_inputs_labels_for_multimodal_streaming_origin(
+    def prepare_inputs_labels_for_multimodal_streaming(
             # Asynchronous encoding with a SemLock, only for videos, batch_size=1
             self,
             input_ids,
