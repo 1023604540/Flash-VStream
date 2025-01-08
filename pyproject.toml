@@ -17,11 +17,11 @@ dependencies = [
     "tokenizers>=0.12.1",
     "torch==2.0.1", 
     "torchvision==0.15.2", 
-    "wandb",
+    #"wandb",
     "tensorboard",
     "tensorboardX",
     "httpx==0.23.0",
-    ##"deepspeed==0.9.5",
+    "deepspeed==0.14.4",
     "peft==0.4.0",
     "transformers==4.31.0",
     "accelerate==0.21.0",
@@ -31,6 +31,7 @@ dependencies = [
     "einops==0.6.1", "einops-exts==0.0.4", "timm==0.6.13",
     "decord",
     "openai==0.28.0",
+    "wandb==0.17.2",
 ]
 
 [project.urls]
