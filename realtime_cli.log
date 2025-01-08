@@ -1,0 +1,523 @@
+2025-01-02 18:53:46,488 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): huggingface.co:443
+2025-01-02 18:53:46,615 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 18:54:17,182 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+2025-01-02 18:54:17,300 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 18:54:17,411 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/model.safetensors HTTP/1.1" 302 0
+2025-01-02 18:54:17,416 MainProcess filelock DEBUG    Attempting to acquire lock 22529050415920 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 18:54:17,450 MainProcess filelock DEBUG    Lock 22529050415920 acquired on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 18:54:17,476 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): cdn-lfs.hf.co:443
+2025-01-02 18:54:57,529 MainProcess filelock DEBUG    Attempting to release lock 22529050415920 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 18:54:57,530 MainProcess filelock DEBUG    Lock 22529050415920 released on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:14:05,660 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): huggingface.co:443
+2025-01-02 19:14:05,816 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:14:33,591 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+2025-01-02 19:14:33,714 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:14:33,828 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/model.safetensors HTTP/1.1" 302 0
+2025-01-02 19:14:33,832 MainProcess filelock DEBUG    Attempting to acquire lock 23443719870000 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:14:33,862 MainProcess filelock DEBUG    Lock 23443719870000 acquired on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:14:33,897 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): cdn-lfs.hf.co:443
+2025-01-02 19:15:13,954 MainProcess filelock DEBUG    Attempting to release lock 23443719870000 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:15:13,955 MainProcess filelock DEBUG    Lock 23443719870000 released on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:34:24,954 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): huggingface.co:443
+2025-01-02 19:34:25,091 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:34:51,536 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+2025-01-02 19:34:51,657 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:34:51,770 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/model.safetensors HTTP/1.1" 302 0
+2025-01-02 19:34:51,774 MainProcess filelock DEBUG    Attempting to acquire lock 22987265495136 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:34:51,794 MainProcess filelock DEBUG    Lock 22987265495136 acquired on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:34:51,826 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): cdn-lfs.hf.co:443
+2025-01-02 19:35:31,883 MainProcess filelock DEBUG    Attempting to release lock 22987265495136 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:35:31,884 MainProcess filelock DEBUG    Lock 22987265495136 released on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:44:01,069 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): huggingface.co:443
+2025-01-02 19:44:01,206 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:44:22,236 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+2025-01-02 19:44:22,349 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:44:22,461 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/model.safetensors HTTP/1.1" 302 0
+2025-01-02 19:44:22,464 MainProcess filelock DEBUG    Attempting to acquire lock 140006745817824 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:44:22,465 MainProcess filelock DEBUG    Lock 140006745817824 acquired on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:44:22,468 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): cdn-lfs.hf.co:443
+2025-01-02 19:44:22,506 MainProcess urllib3.connectionpool DEBUG    https://cdn-lfs.hf.co:443 "GET /openai/clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1736101945&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTczNjEwMTk0NX19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy5oZi5jby9vcGVuYWkvY2xpcC12aXQtbGFyZ2UtcGF0Y2gxNC9hMmJmNzMwYTBjN2RlYmYxNjBmN2E2YjUwYjNhYWYzNzAzZTdlODhhYzczZGU3YTMxNDkwMzE0MWRiMDI2ZGNiP3Jlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249KiJ9XX0_&Signature=TXRwgHQwMYO0~9IKMerueHFr~YSPlM2XpJyncp-AlWTBQ9jB04K6mbvz9-JrCi4ur0NIwmMClTwaGyrZZmSrXXZ2rLJcYaUaFiuK7xLuuQJQMIPKmeQzia0K3wWVFrftViR50PjXuRGxYJF3GrxTGtxfad8nF6AwbHKbSevV~ovTqg60dndVOW-B5djmgHLQAkx0oGY-d-xlPfDzNZYdbLN1pOriM~S-BrTenAesLqIEfsZNb1KkbmMK~St6jSdSdWH4GaMBxXdPJQCP36GJhDWEGLBDvldmfrsXzJYytAsOcn2qjFFIIqAk7KJp2lmOjCFudapAZJxjPYyOnk02SA__&Key-Pair-Id=K3RPWS32NSSJCE HTTP/1.1" 200 1710540580
+2025-01-02 19:44:31,329 MainProcess filelock DEBUG    Attempting to release lock 140006745817824 on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:44:31,330 MainProcess filelock DEBUG    Lock 140006745817824 released on /home/hpc/b232dd/b232dd21/.cache/huggingface/hub/.locks/models--openai--clip-vit-large-patch14/a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb.lock
+2025-01-02 19:46:04,796 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): huggingface.co:443
+2025-01-02 19:46:04,927 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:46:19,694 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+2025-01-02 19:46:19,809 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:46:19,923 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/model.safetensors HTTP/1.1" 302 0
+2025-01-02 19:46:21,134 MainProcess __main__ INFO     Using conv_mode=vicuna_v1
+2025-01-02 19:46:24,560 MainProcess __main__ INFO     Important: set model.config.video_max_frames = 1200
+2025-01-02 19:46:24,561 MainProcess __main__ INFO     Important: set video_fps = 1.0
+2025-01-02 19:46:24,561 MainProcess __main__ INFO     Important: set play_speed = 1.0
+2025-01-02 19:46:28,513 Process-4  __mp_main__ INFO     MemManager Process: start
+2025-01-02 19:46:32,590 Process-3  __mp_main__ INFO     Simulator Process: start, length = 2808
+2025-01-02 19:46:32,593 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:32,620 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:33,592 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	1 to 2,	real_sleep=1.001433 (1.001433, 1.001433)
+2025-01-02 19:46:33,711 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:0 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:33,811 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:1 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:33,912 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:2 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,013 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:3 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,113 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:4 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,214 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:5 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,314 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:6 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,415 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:7 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,515 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:8 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,593 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	2 to 3,	real_sleep=1.001249 (1.001341, 1.001433)
+2025-01-02 19:46:34,616 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:9 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,717 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:10 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,817 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:11 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:34,918 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:12 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,018 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:13 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,119 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:14 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,219 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:15 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,320 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:16 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,421 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:17 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,521 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:18 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,594 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	3 to 4,	real_sleep=1.001171 (1.001284, 1.001433)
+2025-01-02 19:46:35,622 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:19 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,722 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:20 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,823 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:21 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:35,924 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:22 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,024 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:23 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,125 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:24 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,225 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:25 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,326 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:26 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,426 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:27 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,527 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:28 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,596 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	4 to 5,	real_sleep=1.001175 (1.001257, 1.001433)
+2025-01-02 19:46:36,628 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:29 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,728 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:30 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,829 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:31 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:36,929 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:32 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,030 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:33 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,131 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:34 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,231 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:35 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,332 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:36 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,432 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:37 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,533 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:38 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,597 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	5 to 6,	real_sleep=1.001171 (1.001240, 1.001433)
+2025-01-02 19:46:37,634 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:39 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,734 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:40 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,835 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:41 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:37,936 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:42 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,036 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:43 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,137 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:44 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,237 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:45 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,338 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:46 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,438 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:47 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,539 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:48 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,598 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	6 to 7,	real_sleep=1.001271 (1.001245, 1.001433)
+2025-01-02 19:46:38,640 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:49 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,740 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:50 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,841 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:51 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:38,941 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:52 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,042 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:53 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,143 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:54 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,243 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:55 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,344 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:56 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,444 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:57 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,545 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:58 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,599 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	7 to 8,	real_sleep=1.001167 (1.001234, 1.001433)
+2025-01-02 19:46:39,646 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:59 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,746 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:60 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,847 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:61 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:39,947 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:62 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,048 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:63 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,149 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:64 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,249 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:65 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,350 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:66 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,450 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:67 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,551 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:68 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,600 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	8 to 9,	real_sleep=1.001158 (1.001224, 1.001433)
+2025-01-02 19:46:40,651 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:69 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,752 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:70 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,853 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:71 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:40,953 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:72 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,054 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:73 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,155 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:74 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,255 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:75 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,356 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:76 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,456 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:77 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,557 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:78 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,601 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	9 to 10,	real_sleep=1.001173 (1.001219, 1.001433)
+2025-01-02 19:46:41,657 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:79 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,758 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:80 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,859 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:81 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:41,959 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:82 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,060 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:83 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,160 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:84 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,261 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:85 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,362 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:86 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,462 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:87 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,563 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:88 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,603 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	10 to 11,	real_sleep=1.001173 (1.001214, 1.001433)
+2025-01-02 19:46:42,663 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:89 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,764 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:90 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,865 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:91 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:42,965 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:92 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,066 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:93 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,166 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:94 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,267 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:95 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,367 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:96 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,468 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:97 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,569 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:98 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,669 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:99 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,770 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:100 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,870 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:101 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:43,971 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:102 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,071 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:103 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,172 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:104 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,273 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:105 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,373 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:106 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,473 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:107 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,574 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:108 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,675 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:109 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,775 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:110 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,876 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:111 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:44,976 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:112 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,077 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:113 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,177 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:114 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,277 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:115 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,378 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:116 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,479 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:117 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,579 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:118 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,680 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:119 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,780 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:120 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,881 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:121 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:45,981 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:122 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,082 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:123 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,182 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:124 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,283 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:125 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,384 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:126 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,484 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:127 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,585 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:128 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,685 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:129 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,786 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:130 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,886 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:131 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:46,987 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:132 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,087 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:133 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,187 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:134 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,288 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:135 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,388 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:136 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,489 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:137 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,589 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:138 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,690 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:139 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,790 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:140 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,891 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:141 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:47,991 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:142 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,092 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:143 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,192 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:144 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,293 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:145 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,394 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:146 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,494 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:147 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,595 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:148 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,695 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:149 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,796 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:150 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,897 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:151 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:48,997 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:152 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,098 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:153 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,198 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:154 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,299 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:155 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,400 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:156 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,500 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:157 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,601 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:158 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,702 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:159 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,802 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:160 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:49,903 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:161 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:50,003 MainProcess flash_vstream.model.vstream_arch ERROR    Attempt:162 Failed to get video features, Error: not enough values to unpack (expected 4, got 0)
+2025-01-02 19:46:50,099 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([1, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([1, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([1, 1, 1024]) torch.float16
+2025-01-02 19:46:50,099 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,099 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=0,	memory_latency=17.506575, not logged
+2025-01-02 19:46:50,100 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	11 to 12,	real_sleep=1.001150 (1.001208, 1.001433)
+2025-01-02 19:46:50,100 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,106 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([1, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([1, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([1, 1, 1024]) torch.float16
+2025-01-02 19:46:50,126 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,335 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([3, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([2, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([2, 1, 1024]) torch.float16
+2025-01-02 19:46:50,339 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,339 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=1,	memory_latency=0.239146 (0.239146, 0.239146)
+2025-01-02 19:46:50,341 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,354 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,369 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([3, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([3, 1, 1024]) torch.float16
+2025-01-02 19:46:50,370 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,370 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=2,	memory_latency=0.028795 (0.133971, 0.239146)
+2025-01-02 19:46:50,371 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,381 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,397 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([4, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([4, 1, 1024]) torch.float16
+2025-01-02 19:46:50,397 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,397 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=3,	memory_latency=0.026334 (0.098092, 0.239146)
+2025-01-02 19:46:50,398 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,408 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,423 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([5, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([5, 1, 1024]) torch.float16
+2025-01-02 19:46:50,424 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,424 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=4,	memory_latency=0.026159 (0.080108, 0.239146)
+2025-01-02 19:46:50,424 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,435 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,450 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([6, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([6, 1, 1024]) torch.float16
+2025-01-02 19:46:50,451 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,451 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=5,	memory_latency=0.026255 (0.069338, 0.239146)
+2025-01-02 19:46:50,451 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,461 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,477 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([7, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([7, 1, 1024]) torch.float16
+2025-01-02 19:46:50,477 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,477 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=6,	memory_latency=0.025843 (0.062089, 0.239146)
+2025-01-02 19:46:50,478 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,495 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,533 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([8, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([8, 1, 1024]) torch.float16
+2025-01-02 19:46:50,533 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,533 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=7,	memory_latency=0.055464 (0.061142, 0.239146)
+2025-01-02 19:46:50,534 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,544 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,560 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([9, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([9, 1, 1024]) torch.float16
+2025-01-02 19:46:50,560 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,560 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=8,	memory_latency=0.026250 (0.056781, 0.239146)
+2025-01-02 19:46:50,561 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,571 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,587 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([10, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([10, 1, 1024]) torch.float16
+2025-01-02 19:46:50,587 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,587 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=9,	memory_latency=0.026324 (0.053397, 0.239146)
+2025-01-02 19:46:50,588 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,598 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,614 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([11, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([11, 1, 1024]) torch.float16
+2025-01-02 19:46:50,614 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,614 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=10,	memory_latency=0.026447 (0.050702, 0.239146)
+2025-01-02 19:46:50,615 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:50,626 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:50,642 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([12, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([12, 1, 1024]) torch.float16
+2025-01-02 19:46:50,642 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:50,642 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=11,	memory_latency=0.027328 (0.048577, 0.239146)
+2025-01-02 19:46:51,101 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	12 to 13,	real_sleep=7.497233 (1.542544, 7.497233)
+2025-01-02 19:46:51,102 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:51,113 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:51,130 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([13, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([13, 1, 1024]) torch.float16
+2025-01-02 19:46:51,131 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:51,131 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=12,	memory_latency=0.028231 (0.046881, 0.239146)
+2025-01-02 19:46:52,102 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	13 to 14,	real_sleep=1.001190 (1.500901, 7.497233)
+2025-01-02 19:46:52,103 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:52,114 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:52,130 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([14, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([14, 1, 1024]) torch.float16
+2025-01-02 19:46:52,131 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:52,131 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=13,	memory_latency=0.027192 (0.045367, 0.239146)
+2025-01-02 19:46:52,895 MainProcess __main__ INFO     CliServer: idx=0,	conv_latency=19.39448986807838,	llm_latency=19.392297190148383
+2025-01-02 19:46:53,103 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	14 to 15,	real_sleep=1.001148 (1.465204, 7.497233)
+2025-01-02 19:46:53,105 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:53,116 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:53,132 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([15, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([15, 1, 1024]) torch.float16
+2025-01-02 19:46:53,132 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:53,133 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=14,	memory_latency=0.027757 (0.044109, 0.239146)
+2025-01-02 19:46:54,105 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	15 to 16,	real_sleep=1.001350 (1.434281, 7.497233)
+2025-01-02 19:46:54,106 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:54,118 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:54,135 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([16, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([16, 1, 1024]) torch.float16
+2025-01-02 19:46:54,136 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:54,136 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=15,	memory_latency=0.029492 (0.043134, 0.239146)
+2025-01-02 19:46:55,106 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	16 to 17,	real_sleep=1.001271 (1.407218, 7.497233)
+2025-01-02 19:46:55,107 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:55,118 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:55,134 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([17, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([17, 1, 1024]) torch.float16
+2025-01-02 19:46:55,135 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:55,135 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=16,	memory_latency=0.027474 (0.042156, 0.239146)
+2025-01-02 19:46:56,107 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	17 to 18,	real_sleep=1.001155 (1.383332, 7.497233)
+2025-01-02 19:46:56,109 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:56,120 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:56,136 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([18, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([18, 1, 1024]) torch.float16
+2025-01-02 19:46:56,137 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:56,137 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=17,	memory_latency=0.027949 (0.041320, 0.239146)
+2025-01-02 19:46:57,108 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	18 to 19,	real_sleep=1.001179 (1.362101, 7.497233)
+2025-01-02 19:46:57,110 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:57,122 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:57,138 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([19, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([19, 1, 1024]) torch.float16
+2025-01-02 19:46:57,139 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:57,139 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=18,	memory_latency=0.029387 (0.040657, 0.239146)
+2025-01-02 19:46:57,904 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([19, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([19, 1, 1024]) torch.float16
+2025-01-02 19:46:58,109 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	19 to 20,	real_sleep=1.000647 (1.343077, 7.497233)
+2025-01-02 19:46:58,111 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:58,131 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:58,189 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([20, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([20, 1, 1024]) torch.float16
+2025-01-02 19:46:58,190 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:58,190 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=19,	memory_latency=0.079300 (0.042691, 0.239146)
+2025-01-02 19:46:59,008 MainProcess __main__ INFO     CliServer: idx=1,	real_sleep=24.399771 (24.399771, 24.399771),	conv_latency=1.107437 (1.107437, 1.107437),	llm_latency=1.105873 (1.105873, 1.105873)
+2025-01-02 19:46:59,110 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	20 to 21,	real_sleep=1.001179 (1.325982, 7.497233)
+2025-01-02 19:46:59,112 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:46:59,122 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:46:59,139 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([21, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([21, 1, 1024]) torch.float16
+2025-01-02 19:46:59,140 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:46:59,140 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=20,	memory_latency=0.028489 (0.041981, 0.239146)
+2025-01-02 19:47:00,111 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	21 to 22,	real_sleep=1.001229 (1.310518, 7.497233)
+2025-01-02 19:47:00,113 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:00,123 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:00,140 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([22, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([22, 1, 1024]) torch.float16
+2025-01-02 19:47:00,141 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:00,141 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=21,	memory_latency=0.027973 (0.041314, 0.239146)
+2025-01-02 19:47:01,113 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	22 to 23,	real_sleep=1.001165 (1.296456, 7.497233)
+2025-01-02 19:47:01,114 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:01,127 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:01,144 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([23, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([23, 1, 1024]) torch.float16
+2025-01-02 19:47:01,144 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:01,144 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=22,	memory_latency=0.030161 (0.040807, 0.239146)
+2025-01-02 19:47:02,114 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	23 to 24,	real_sleep=1.001337 (1.283625, 7.497233)
+2025-01-02 19:47:02,115 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:02,126 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:02,144 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([24, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([24, 1, 1024]) torch.float16
+2025-01-02 19:47:02,144 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:02,144 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=23,	memory_latency=0.028823 (0.040286, 0.239146)
+2025-01-02 19:47:03,115 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	24 to 25,	real_sleep=1.001299 (1.271861, 7.497233)
+2025-01-02 19:47:03,117 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:03,129 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:03,145 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:03,146 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:03,146 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=24,	memory_latency=0.029458 (0.039835, 0.239146)
+2025-01-02 19:47:04,016 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:04,116 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	25 to 26,	real_sleep=1.001191 (1.261035, 7.497233)
+2025-01-02 19:47:04,118 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:04,135 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:05,117 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	26 to 27,	real_sleep=1.000616 (1.251018, 7.497233)
+2025-01-02 19:47:05,258 MainProcess __main__ INFO     CliServer: idx=2,	real_sleep=6.112690 (15.256231, 24.399771),	conv_latency=1.244961 (1.176199, 1.244961),	llm_latency=1.243684 (1.174778, 1.243684)
+2025-01-02 19:47:05,299 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:05,345 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:05,345 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=25,	memory_latency=1.227327 (0.087334, 1.227327)
+2025-01-02 19:47:05,346 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:05,357 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:05,433 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:05,433 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:05,434 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=26,	memory_latency=0.087747 (0.087350, 1.227327)
+2025-01-02 19:47:06,118 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	27 to 28,	real_sleep=1.001314 (1.241770, 7.497233)
+2025-01-02 19:47:06,120 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:06,131 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:06,205 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:06,205 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:06,205 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=27,	memory_latency=0.085178 (0.087270, 1.227327)
+2025-01-02 19:47:07,120 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	28 to 29,	real_sleep=1.001425 (1.233186, 7.497233)
+2025-01-02 19:47:07,121 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:07,132 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:07,204 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:07,205 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:07,205 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=28,	memory_latency=0.083707 (0.087143, 1.227327)
+2025-01-02 19:47:08,121 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	29 to 30,	real_sleep=1.001350 (1.225192, 7.497233)
+2025-01-02 19:47:08,123 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:08,133 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:08,205 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:08,206 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:08,206 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=29,	memory_latency=0.083150 (0.087005, 1.227327)
+2025-01-02 19:47:09,122 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	30 to 31,	real_sleep=1.001221 (1.217726, 7.497233)
+2025-01-02 19:47:09,124 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:09,135 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:09,209 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:09,209 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:09,209 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=30,	memory_latency=0.085637 (0.086959, 1.227327)
+2025-01-02 19:47:10,124 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	31 to 32,	real_sleep=1.001311 (1.210745, 7.497233)
+2025-01-02 19:47:10,125 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:10,137 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:10,211 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:10,212 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:10,212 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=31,	memory_latency=0.086781 (0.086954, 1.227327)
+2025-01-02 19:47:10,267 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:10,929 MainProcess __main__ INFO     CliServer: idx=3,	real_sleep=6.250211 (12.254224, 24.399771),	conv_latency=0.666019 (1.006139, 1.244961),	llm_latency=0.664691 (1.004749, 1.243684)
+2025-01-02 19:47:11,125 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	32 to 33,	real_sleep=1.001213 (1.204197, 7.497233)
+2025-01-02 19:47:11,126 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:11,138 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:11,220 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:11,221 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:11,221 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=32,	memory_latency=0.094313 (0.087184, 1.227327)
+2025-01-02 19:47:12,126 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	33 to 34,	real_sleep=1.001233 (1.198047, 7.497233)
+2025-01-02 19:47:12,127 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:12,138 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:12,211 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:12,211 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:12,212 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=33,	memory_latency=0.084050 (0.087089, 1.227327)
+2025-01-02 19:47:13,127 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	34 to 35,	real_sleep=1.001356 (1.192262, 7.497233)
+2025-01-02 19:47:13,129 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:13,141 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:13,213 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:13,214 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:13,214 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=34,	memory_latency=0.085394 (0.087039, 1.227327)
+2025-01-02 19:47:14,129 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	35 to 36,	real_sleep=1.001325 (1.186807, 7.497233)
+2025-01-02 19:47:14,130 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:14,142 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:14,215 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:14,216 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:14,216 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=35,	memory_latency=0.085786 (0.087003, 1.227327)
+2025-01-02 19:47:15,130 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	36 to 37,	real_sleep=1.001227 (1.181652, 7.497233)
+2025-01-02 19:47:15,131 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:15,143 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:15,216 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:15,217 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:15,217 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=36,	memory_latency=0.085122 (0.086951, 1.227327)
+2025-01-02 19:47:15,940 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([25, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([25, 1, 1024]) torch.float16
+2025-01-02 19:47:16,131 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	37 to 38,	real_sleep=1.001214 (1.176775, 7.497233)
+2025-01-02 19:47:16,133 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:16,156 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:16,664 MainProcess __main__ INFO     CliServer: idx=4,	real_sleep=5.671309 (10.608495, 24.399771),	conv_latency=0.729187 (0.936901, 1.244961),	llm_latency=0.727050 (0.935324, 1.243684)
+2025-01-02 19:47:39,214 MainProcess urllib3.connectionpool DEBUG    Starting new HTTPS connection (1): huggingface.co:443
+2025-01-02 19:47:39,351 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:47:45,622 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/preprocessor_config.json HTTP/1.1" 200 0
+2025-01-02 19:47:45,758 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/config.json HTTP/1.1" 200 0
+2025-01-02 19:47:45,869 MainProcess urllib3.connectionpool DEBUG    https://huggingface.co:443 "HEAD /openai/clip-vit-large-patch14/resolve/main/model.safetensors HTTP/1.1" 302 0
+2025-01-02 19:47:46,229 MainProcess __main__ INFO     Using conv_mode=vicuna_v1
+2025-01-02 19:47:49,342 MainProcess __main__ INFO     Important: set model.config.video_max_frames = 1200
+2025-01-02 19:47:49,342 MainProcess __main__ INFO     Important: set video_fps = 1.0
+2025-01-02 19:47:49,342 MainProcess __main__ INFO     Important: set play_speed = 1.0
+2025-01-02 19:47:53,188 Process-4  __mp_main__ INFO     MemManager Process: start
+2025-01-02 19:47:55,859 Process-3  __mp_main__ INFO     Simulator Process: start, length = 2808
+2025-01-02 19:47:55,862 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:55,889 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:56,402 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([1, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([1, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([1, 1, 1024]) torch.float16
+2025-01-02 19:47:56,402 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:56,402 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=0,	memory_latency=0.540463, not logged
+2025-01-02 19:47:56,861 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	1 to 2,	real_sleep=1.001320 (1.001320, 1.001320)
+2025-01-02 19:47:56,863 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:56,880 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:56,908 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([3, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([2, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([2, 1, 1024]) torch.float16
+2025-01-02 19:47:56,909 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:56,909 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=1,	memory_latency=0.046111 (0.046111, 0.046111)
+2025-01-02 19:47:57,862 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	2 to 3,	real_sleep=1.001228 (1.001274, 1.001320)
+2025-01-02 19:47:57,864 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:57,874 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:57,889 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([3, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([3, 1, 1024]) torch.float16
+2025-01-02 19:47:57,890 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:57,890 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=2,	memory_latency=0.026220 (0.036165, 0.046111)
+2025-01-02 19:47:58,184 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([3, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([3, 1, 1024]) torch.float16
+2025-01-02 19:47:58,863 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	3 to 4,	real_sleep=1.001199 (1.001249, 1.001320)
+2025-01-02 19:47:58,865 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:58,884 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:58,921 MainProcess __main__ INFO     CliServer: idx=0,	conv_latency=0.7480052523314953,	llm_latency=0.7453584582544863
+2025-01-02 19:47:58,924 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([4, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([4, 1, 1024]) torch.float16
+2025-01-02 19:47:58,924 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:58,924 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=3,	memory_latency=0.059456 (0.043929, 0.059456)
+2025-01-02 19:47:59,864 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	4 to 5,	real_sleep=1.001355 (1.001276, 1.001355)
+2025-01-02 19:47:59,866 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:47:59,877 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:47:59,893 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([5, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([5, 1, 1024]) torch.float16
+2025-01-02 19:47:59,893 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:47:59,893 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=4,	memory_latency=0.027363 (0.039787, 0.059456)
+2025-01-02 19:48:00,866 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	5 to 6,	real_sleep=1.001332 (1.001287, 1.001355)
+2025-01-02 19:48:00,867 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:48:00,878 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:48:00,894 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([6, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([6, 1, 1024]) torch.float16
+2025-01-02 19:48:00,894 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:48:00,894 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=5,	memory_latency=0.027202 (0.037270, 0.059456)
+2025-01-02 19:48:01,867 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	6 to 7,	real_sleep=1.001239 (1.001279, 1.001355)
+2025-01-02 19:48:01,868 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:48:01,879 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:48:01,894 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([7, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([7, 1, 1024]) torch.float16
+2025-01-02 19:48:01,895 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:48:01,895 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=6,	memory_latency=0.026328 (0.035447, 0.059456)
+2025-01-02 19:48:02,868 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	7 to 8,	real_sleep=1.001157 (1.001261, 1.001355)
+2025-01-02 19:48:02,870 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:48:02,881 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:48:02,897 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([8, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([8, 1, 1024]) torch.float16
+2025-01-02 19:48:02,898 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:48:02,898 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=7,	memory_latency=0.028152 (0.034405, 0.059456)
+2025-01-02 19:48:03,869 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	8 to 9,	real_sleep=1.001287 (1.001265, 1.001355)
+2025-01-02 19:48:03,871 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:48:03,882 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:48:03,897 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([9, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([9, 1, 1024]) torch.float16
+2025-01-02 19:48:03,898 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:48:03,898 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=8,	memory_latency=0.026959 (0.033474, 0.059456)
+2025-01-02 19:48:03,931 MainProcess flash_vstream.model.vstream_arch INFO     Read cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([9, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([9, 1, 1024]) torch.float16
+2025-01-02 19:48:04,469 MainProcess __main__ INFO     CliServer: idx=1,	real_sleep=5.753208 (5.753208, 5.753208),	conv_latency=0.542765 (0.542765, 0.542765),	llm_latency=0.541110 (0.541110, 0.541110)
+2025-01-02 19:48:04,871 Process-3  __mp_main__ INFO     Simulator: write 1 frames,	9 to 10,	real_sleep=1.001293 (1.001268, 1.001355)
+2025-01-02 19:48:04,872 Process-4  __mp_main__ INFO     MemManager: get 1 frames from queue
+2025-01-02 19:48:04,883 Process-4  __mp_main__ INFO     MemManager: Start embedding
+2025-01-02 19:48:04,899 Process-4  flash_vstream.model.vstream_arch INFO     Write cur_memory=torch.Size([4, 64, 1024]) torch.float16, long_memory_compreesed=torch.Size([10, 16, 1024]) torch.float16, Turing_memory_compreesed=torch.Size([10, 1, 1024]) torch.float16
+2025-01-02 19:48:04,899 Process-4  __mp_main__ INFO     MemManager: End embedding
+2025-01-02 19:48:04,899 Process-4  __mp_main__ INFO     MemManager: embedded 1 frames,	idx=9,	memory_latency=0.026789 (0.032731, 0.059456)

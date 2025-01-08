@@ -13,6 +13,7 @@ flash_vstream/eval_video/model_msvd_qa_featuresloader.py
 flash_vstream/model/__init__.py
 flash_vstream/model/builder.py
 flash_vstream/model/compress_functions.py
+flash_vstream/model/recurrent_memory.py
 flash_vstream/model/vstream_arch.py
 flash_vstream/model/language_model/vstream_llama.py
 flash_vstream/model/multimodal_encoder/builder.py
