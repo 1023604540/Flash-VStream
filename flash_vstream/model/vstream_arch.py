@@ -347,7 +347,7 @@ class VStreamMetaForCausalLM(ABC):
                 Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
             self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
-            self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(memory_feature, self.recurrent_memory)
+            self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(memory_feature, self.recurrent_memory)  # append recurrent memory
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), self.recurrent_memory.flatten(0, 1)], dim=0)
             new_image_features.append(memory_feature)
         return new_image_features
@@ -1066,7 +1066,7 @@ class VStreamMetaForCausalLM(ABC):
                 print("flag triggered")
                 image_feature = image_feature.to(self.device)
                 self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
-                self.r_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.r_memory)
+                self.r_memory, _ = self.recurrent_memory_transformer.forward(image_feature, self.r_memory)  # append recurrent memory
                 self.recurrent_memory[:] = [self.r_memory.cpu()]  # 将张量转换为 NumPy 数组并存储
                 print("recurrent_memory", self.r_memory.shape)
         return []
