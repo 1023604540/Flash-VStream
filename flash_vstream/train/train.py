@@ -724,7 +724,6 @@ class LazySupervisedDataset(Dataset):
                         sources = preprocess_multimodal(
                             copy.deepcopy([e["conversations"] for e in sources]),
                             self.data_args)
-                        print('get source from image')
                     
                 elif 'video' in sources[0]:
                     video_file = self.list_data_dict[i]['video']
