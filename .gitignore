@@ -1,8 +1,10 @@
 scripts/realtime_cli.sh
 scripts/train_and_eval.sh
 scripts/realtime_cli.log
+scripts/
 data/
 ckpt/
+vstream.egg-info/
 Flash-VStream-7b/
 **/__pycache__
 *.pyc
