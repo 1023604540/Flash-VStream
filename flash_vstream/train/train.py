@@ -703,7 +703,7 @@ class LazySupervisedDataset(Dataset):
 
                     else:
                         processor = self.data_args.image_processor
-                        image = Image.open().convert('RGB')
+                        image = Image.open(image_file).convert('RGB')
                         if self.data_args.image_aspect_ratio == 'pad':
                             def expand2square(pil_img, background_color):
                                 width, height = pil_img.size

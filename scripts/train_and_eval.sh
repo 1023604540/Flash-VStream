@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # set up python environment
-conda activate vstream
+conda activate vstream1
 
 # set important configurations
 type=weighted_kmeans
@@ -12,7 +12,7 @@ long_length=25
 long_size=4
 Turing_length=25
 Turing_size=1
-ngpus=8
+ngpus=1
 gputype=A100
 
 # auto calculate configurations
@@ -26,7 +26,7 @@ deepspeed --master_addr 127.0.0.1 --master_port 12345 --include localhost:${gpus
     --version plain \
     --data_path ./data/pretrain/llava_558k_with_webvid.json \
     --image_folder /anvme/workspace/b232dd16-datasets/blip_laion_cc_sbu_558k \
-    --video_folder /anvme/workspace/b232dd16-datasets/webvid \
+    --video_folder /anvme/workspace/b232dd16-datasets/webvid/videos \
     --vision_tower ./ckpt/clip-vit-large-patch14 \
     --mm_projector_type mlp2x_gelu \
     --tune_mm_mlp_adapter True \
