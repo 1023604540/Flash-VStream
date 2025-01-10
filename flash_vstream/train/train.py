@@ -1029,6 +1029,11 @@ def train():
     data_args.mm_hidden_size = model.get_vision_tower().hidden_size
     data_module = make_supervised_data_module(tokenizer=tokenizer,
                                               data_args=data_args)
+    # add hook to track the backpropagation of gradients
+    for name, param in model.named_parameters():
+        if param.requires_grad:
+            param.register_hook(lambda grad: print(f"Gradient computed for {name}"))
+
     trainer = VStreamTrainer(model=model,
                     tokenizer=tokenizer,
                     args=training_args,
@@ -1056,6 +1061,7 @@ def train():
     else:
         safe_save_model_for_hf_trainer(trainer=trainer,
                                        output_dir=training_args.output_dir)
+
 
 
 if __name__ == "__main__":
