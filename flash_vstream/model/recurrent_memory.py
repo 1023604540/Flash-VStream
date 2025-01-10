@@ -11,7 +11,7 @@ class Residual(nn.Module):
     def __init__(self, input_size, output_size, config):
         super().__init__()
         self.dense = nn.Linear(input_size, output_size)
-        #self.layernorm = nn.LayerNorm(output_size, eps=config.mm_layer_norm_eps)
+        self.layernorm = nn.LayerNorm(output_size, eps=config.mm_layer_norm_eps)
         self.dropout = nn.Dropout(config.mm_hidden_dropout_prob)
 
     def forward(
@@ -21,8 +21,7 @@ class Residual(nn.Module):
     ):
         hidden_states = self.dense(hidden_states)
         hidden_states = self.dropout(hidden_states)
-        #hidden_states = self.layernorm(hidden_states + input_tensor)
-        hidden_states = hidden_states + input_tensor
+        hidden_states = self.layernorm(hidden_states + input_tensor)
         return hidden_states
 
 

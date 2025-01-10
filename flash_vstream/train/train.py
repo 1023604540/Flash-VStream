@@ -1030,9 +1030,14 @@ def train():
     data_module = make_supervised_data_module(tokenizer=tokenizer,
                                               data_args=data_args)
     # add hook to track the backpropagation of gradients
+    def gradient_hook(grad, param_name):
+        grad_detached = grad.detach()
+        print(f"Gradient for {param_name}: max={grad_detached.abs().max().item()}, "
+              f"mean={grad_detached.mean().item()}, shape={grad_detached.size()}")
+
     for name, param in model.named_parameters():
         if param.requires_grad:
-            param.register_hook(lambda grad: print(f"Gradient computed for {name}"))
+            param.register_hook(lambda grad, param_name=name: gradient_hook(grad, param_name))
 
     trainer = VStreamTrainer(model=model,
                     tokenizer=tokenizer,
