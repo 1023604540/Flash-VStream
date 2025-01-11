@@ -191,8 +191,7 @@ class TransformerProjector(nn.Module):
             self.config = Config()  # Use default configuration
         self.layers = nn.ModuleList([TransformerLayer(self.config) for _ in range(self.config.depth)])
         self.num_memory_tokens = self.config.num_memory_tokens
-        self.recurrent_memory = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size),
-                                             requires_grad=False)
+        #self.recurrent_memory = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
         self.batch_size = None
 
 
@@ -206,7 +205,7 @@ class TransformerProjector(nn.Module):
             use_cache: Optional[bool] = False,
 
     ):
-
+        recurrent_memory = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
         # use cache
         next_cache = () if use_cache else None
 
@@ -223,7 +222,7 @@ class TransformerProjector(nn.Module):
             if read_memories.ndim == 2:
                 read_memories = repeat(read_memories, 'n d -> b n d', b=self.batch_size)
         else:
-            read_memories = repeat(self.recurrent_memory, 'n d -> b n d', b=self.batch_size)
+            read_memories = repeat(recurrent_memory, 'n d -> b n d', b=self.batch_size)
 
         device = hidden_states.device
         read_memories = read_memories.to(device)
