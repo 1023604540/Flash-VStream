@@ -207,12 +207,10 @@ class TransformerProjector(nn.Module):
     ):
         if recurrent_memory is None:
             recurrent_memory = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
+        recurrent_memory = recurrent_memory.to(hidden_states.dtype)
+
         # use cache
         next_cache = () if use_cache else None
-
-        print(f"hidden_states dtype: {hidden_states.dtype}")
-        print(f"q_proj weight dtype: {self.q_proj.weight.dtype}")
-        print(f"recurrent_memory dtype: {self.recurrent_memory.dtype}")
 
         assert hidden_states.shape[-1] == self.config.mm_hidden_size  # memory token dimension should match hidden state dimension
         if hidden_states.ndim == 2:
