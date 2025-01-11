@@ -59,8 +59,7 @@ class Attention(nn.Module):
             output_attentions: Optional[bool] = False,
     ):
         query = self.transpose_for_scores(self.q_proj(hidden_states))
-        print("query", query.shape)
-
+        
         if encoder_hidden_states is not None:  # use encoder_hidden_states to initialize key and value
             # cross attention
             if past_key_value is not None:
@@ -85,15 +84,11 @@ class Attention(nn.Module):
             else:
                 key = self.transpose_for_scores(self.k_proj(hidden_states))
                 value = self.transpose_for_scores(self.v_proj(hidden_states))
-        print("key", key.shape)
         attention_scores = torch.matmul(query, key.transpose(-1, -2))  # B, H, N, M
 
         # TODO position encoding
 
         attention_scores = attention_scores / math.sqrt(self.attention_head_size)
-        # print("with memory token, hidden_state = ", hidden_states.shape)
-        # print("attention_scores", attention_scores.shape)
-        # print("attention mask", attention_mask.shape)
         if attention_mask is not None:
             attention_scores += attention_mask
 
@@ -233,7 +228,6 @@ class TransformerProjector(nn.Module):
         assert hidden_states.shape[-1] == self.config.mm_hidden_size  # memory token dimension should match hidden state dimension
         if hidden_states.ndim == 2:
             hidden_states = hidden_states.unsqueeze(0)
-            #print("hidden_states", hidden_states.shape)
         assert hidden_states.ndim == 3
 
         self.batch_size = hidden_states.shape[0]
@@ -286,7 +280,6 @@ class TransformerProjector(nn.Module):
         #     return proj_hidden_states, read_memories, all_self_attentions, all_cross_attentions
         # else:
         #     return read_memories, hidden_states
-        print("recurrent_run_success")
         return read_memories, hidden_states
 
 
