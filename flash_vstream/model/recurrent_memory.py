@@ -198,14 +198,15 @@ class TransformerProjector(nn.Module):
     def forward(
             self,
             hidden_states: torch.Tensor,
-            read_memories: Optional[torch.FloatTensor] = None,
+            recurrent_memory: Optional[torch.FloatTensor] = None,
             # attention_mask: Optional[torch.FloatTensor] = None,
             head_mask: Optional[torch.FloatTensor] = None,
             past_key_values: Optional[Tuple[Tuple[torch.FloatTensor]]] = None,
             use_cache: Optional[bool] = False,
 
     ):
-        recurrent_memory = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
+        if recurrent_memory is None:
+            recurrent_memory = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
         # use cache
         next_cache = () if use_cache else None
 
@@ -218,11 +219,10 @@ class TransformerProjector(nn.Module):
         patch_size = hidden_states.shape[-2] + self.config.num_memory_tokens
         attention_mask = torch.zeros((self.batch_size, self.config.mm_num_attention_heads, patch_size, patch_size))  # attention mask for self-attention
         attention_mask[:, :, self.num_memory_tokens:, :self.num_memory_tokens] = float('-inf')  # hidden_states can not attend to memory
-        if read_memories is not None:
-            if read_memories.ndim == 2:
-                read_memories = repeat(read_memories, 'n d -> b n d', b=self.batch_size)
-        else:
+        if recurrent_memory.ndim == 2:
             read_memories = repeat(recurrent_memory, 'n d -> b n d', b=self.batch_size)
+        else:
+            read_memories = recurrent_memory
 
         device = hidden_states.device
         read_memories = read_memories.to(device)
@@ -285,7 +285,7 @@ class Config:
 # model = TransformerProjector()
 # output = model(
 #     hidden_states=hidden_states,
-#     # read_memories=None
+#     recurrent_memory=old_read_memories,
 #     # encoder_hidden_states=encoder_hidden_states,
 #     # encoder_attention_mask=encoder_attention_mask,
 # )
