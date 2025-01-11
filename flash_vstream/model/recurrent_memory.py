@@ -210,6 +210,10 @@ class TransformerProjector(nn.Module):
         # use cache
         next_cache = () if use_cache else None
 
+        print(f"hidden_states dtype: {hidden_states.dtype}")
+        print(f"q_proj weight dtype: {self.q_proj.weight.dtype}")
+        print(f"recurrent_memory dtype: {self.recurrent_memory.dtype}")
+
         assert hidden_states.shape[-1] == self.config.mm_hidden_size  # memory token dimension should match hidden state dimension
         if hidden_states.ndim == 2:
             hidden_states = hidden_states.unsqueeze(0)
