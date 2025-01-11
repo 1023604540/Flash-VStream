@@ -348,6 +348,8 @@ class VStreamMetaForCausalLM(ABC):
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
             ### Calc Recurrent Memory
             self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
+            if self.recurrent_memory is not None:
+                self.recurrent_memory = self.recurrent_memory.detach()
             self.recurrent_memory, _ = self.recurrent_memory_transformer.forward(hidden_states=memory_feature, recurrent_memory=self.recurrent_memory)  # append recurrent memory
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), self.recurrent_memory.flatten(0, 1)], dim=0)
             new_image_features.append(memory_feature)
