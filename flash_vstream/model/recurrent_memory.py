@@ -246,7 +246,7 @@ class TransformerProjector(nn.Module):
             if use_cache:
                 next_cache += (layer_outputs[-1],)
         read_memories, hidden_states = unpack(hidden_states, ps, 'b * d')
-        print("recurrent_run_success")
+        # print("recurrent_run_success")
         return read_memories, hidden_states
 
 
