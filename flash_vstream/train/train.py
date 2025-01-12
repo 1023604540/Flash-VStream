@@ -841,15 +841,31 @@ class DataCollatorForSupervisedDataset(object):
             attention_mask=input_ids.ne(self.tokenizer.pad_token_id),
         )
 
-        if 'feature' in instances[0]:
-            batch['features'] = [instance['feature'] for instance in instances]
-        elif 'image' in instances[0]:
-            images = [instance['image'] for instance in instances]
+        # if 'feature' in instances[0]:
+        #     batch['features'] = [instance['feature'] for instance in instances]
+        # elif 'image' in instances[0]:
+        #     images = [instance['image'] for instance in instances]
+        #     if all(x is not None and x.shape == images[0].shape for x in images):
+        #         batch['images'] = torch.stack(images)
+        #     else:
+        #         batch['images'] = images
+
+        # Handle features
+        if any('feature' in instance for instance in instances):
+            features = [
+                instance.get('feature') for instance in instances if 'feature' in instance
+            ]
+            batch['features'] = features
+
+        # Handle images
+        if any('image' in instance for instance in instances):
+            images = [
+                instance.get('image') for instance in instances if 'image' in instance
+            ]
             if all(x is not None and x.shape == images[0].shape for x in images):
-                batch['images'] = torch.stack(images)
+                batch['images'] = torch.stack(images)  # Stack images if shapes match
             else:
-                batch['images'] = images
-        
+                batch['images'] = images  # Keep as a list if shapes differ
 
         return batch
 
