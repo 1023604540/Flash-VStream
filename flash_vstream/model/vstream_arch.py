@@ -164,7 +164,7 @@ class VStreamMetaForCausalLM(ABC):
     def get_vision_tower(self):
         return self.get_model().get_vision_tower()
 
-    def encode_images(self, images):
+    def encode_images(self, images):  # extract VIT features from images
         image_features = self.get_model().get_vision_tower()(images)
         return image_features
 

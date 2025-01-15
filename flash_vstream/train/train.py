@@ -737,7 +737,7 @@ class LazySupervisedDataset(Dataset):
                         video_file = video_file.replace(suffix, 'safetensors')
                         if not os.path.exists(video_file):
                             print('Video file {} not exist!'.format(video_file))
-                        feature = load_file(video_file)['features']
+                        feature = load_file(video_file)['feature']
                         if 'time' in self.list_data_dict[i]:  # breakpoint mode
                             if 'time_9dense' in self.list_data_dict[i]:
                                 tim = self.list_data_dict[i]['time_9dense'] // 4
