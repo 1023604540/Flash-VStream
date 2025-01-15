@@ -37,8 +37,8 @@ def eval_msvd(args):
         for idx in range(0, num_chunks):
             cmd = ["python", "llama_vstream/eval_video/model_msvd_qa_featuresloader.py",
                     "--model-path", model_path,
-                    "--video_dir", "./data/eval_video/MSVD-QA/video_features",
-                    "--gt_file", "./data/eval_video/MSVD-QA/test_qa.json",
+                    "--video_dir", "anvme/workspace/b232dd16-datasets/eval_video/MSVD-QA/video",
+                    "--gt_file", "/anvme/workspace/b232dd16-datasets/eval_video/MSVD-QA/test_qa.json",
                     "--output_dir", os.path.join(model_path, "evaluation", "msvd"),
                     "--output_name", "pred",
                     "--num-chunks", str(num_chunks),
@@ -69,10 +69,10 @@ def eval_msrvtt(args):
     if not args.only_eval:
         processes = []
         for idx in range(0, num_chunks):
-            cmd = ["python", "llama_vstream/eval_video/model_msvd_qa_featuresloader.py",
+            cmd = ["python", "flash_vstream/eval_video/model_msvd_qa_featuresloader.py",
                     "--model-path", model_path,
-                    "--video_dir", "./data/eval_video/MSRVTT-QA/video_features",
-                    "--gt_file", "./data/eval_video/MSRVTT-QA/test_qa.json",
+                    "--video_dir", "/anvme/workspace/b232dd16-datasets/eval_video/MSRVTT-QA/video",
+                    "--gt_file", "/anvme/workspace/b232dd16-datasets/eval_video/MSRVTT-QA/test_qa.json",
                     "--output_dir", os.path.join(model_path, "evaluation", "msrvtt"),
                     "--output_name", "pred",
                     "--num-chunks", str(num_chunks),
@@ -83,7 +83,7 @@ def eval_msrvtt(args):
             p.start() # 启动子进程
         for p in processes:
             p.join()
-    cmd = ["python", "llama_vstream/eval_video/eval_activitynet_qa.py",
+    cmd = ["python", "flash_vstream/eval_video/eval_activitynet_qa.py",
            "--pred_path", os.path.join(model_path, "evaluation", "msrvtt"),
            "--output_dir", os.path.join(model_path, "evaluation", "msrvtt", "results"),
            "--output_json", os.path.join(model_path, "evaluation", "msrvtt", "results.json"),
@@ -105,8 +105,8 @@ def eval_actnet(args):
         for idx in range(0, num_chunks):
             cmd = ["python", "llama_vstream/eval_video/model_msvd_qa_featuresloader.py",
                     "--model-path", model_path,
-                    "--video_dir", "./data/eval_video/ActivityNet-QA/video_features",
-                    "--gt_file", "./data/eval_video/ActivityNet-QA/test_qa.json", 
+                    "--video_dir", "/anvme/workspace/b232dd16-datasets/eval_video/ActivityNet-QA/all_test",
+                    "--gt_file", "/anvme/workspace/b232dd16-datasets/eval_video/ActivityNet-QA/test_qa.json",
                     "--output_dir", os.path.join(model_path, "evaluation", "actnet"),
                     "--output_name", "pred",
                     "--num-chunks", str(num_chunks),
