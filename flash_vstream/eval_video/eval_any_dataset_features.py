@@ -37,7 +37,7 @@ def eval_msvd(args):
         for idx in range(0, num_chunks):
             cmd = ["python", "flash_vstream/eval_video/model_msvd_qa_featuresloader.py",
                     "--model-path", model_path,
-                    "--video_dir", "anvme/workspace/b232dd16-datasets/eval_video/MSVD-QA/video",
+                    "--video_dir", "/anvme/workspace/b232dd16-datasets/eval_video/MSVD-QA/video",
                     "--gt_file", "/anvme/workspace/b232dd16-datasets/eval_video/MSVD-QA/test_qa.json",
                     "--output_dir", os.path.join(model_path, "evaluation", "msvd"),
                     "--output_name", "pred",
