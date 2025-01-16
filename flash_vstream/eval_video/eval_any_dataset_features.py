@@ -141,8 +141,8 @@ def eval_nextoe(args):  # follow msvd format, OE follow actnet
         for idx in range(0, num_chunks):
             cmd = ["python", "flash_vstream/eval_video/model_msvd_qa_featuresloader.py",
                     "--model-path", model_path,
-                    "--video_dir", "./data/eval_video/nextoe/video_features",
-                    "--gt_file", "./data/eval_video/nextoe/test_qa.json",
+                    "--video_dir", "/anvme/workspace/b232dd16-datasets/eval_video/nextoe/videos",
+                    "--gt_file", "/anvme/workspace/b232dd16-datasets/eval_video/nextoe/test_qa.json",
                     "--output_dir", os.path.join(model_path, "evaluation", "nextoe"),
                     "--output_name", "pred",
                     "--num-chunks", str(num_chunks),
