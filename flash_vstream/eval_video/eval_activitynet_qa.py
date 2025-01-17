@@ -36,6 +36,7 @@ def annotate(prediction_set, caption_files, output_dir):
         question = qa_set['q']
         answer = qa_set['a']
         pred = qa_set['pred']
+        print("hook4")
         try:
             # Compute the correctness score
             completion = openai.ChatCompletion.create(
@@ -67,11 +68,12 @@ def annotate(prediction_set, caption_files, output_dir):
                 ],
                 temperature=0.002
             )
+            print("hook5")
             # Convert response to a Python dictionary.
             response_message = completion["choices"][0]["message"]["content"]
             response_dict = ast.literal_eval(response_message)
             result_qa_pair = [response_dict, qa_set]
-
+            print("hook6")
             # Save the question-answer pairs to a json file.
             with open(f"{output_dir}/{key}.json", "w") as f:
                 json.dump(result_qa_pair, f)
@@ -163,7 +165,7 @@ def main():
                 print(f"completed_files: {completed_files}")
                 print(f"failed for 5 times, break")
                 break
-
+            print("hook1")
             # Break the loop when there are no incomplete files
             if len(incomplete_files) == 0:
                 break
@@ -174,11 +176,11 @@ def main():
             part_len = len(incomplete_files) // num_tasks
             all_parts = [incomplete_files[i:i + part_len] for i in range(0, len(incomplete_files), part_len)]
             task_args = [(prediction_set, part, args.output_dir) for part in all_parts]
-
+            print("hook2")
             # Use a pool of workers to process the files in parallel.
             with Pool() as pool:
                 pool.starmap(annotate, task_args)
-
+            print("hook3")
         except Exception as e:
             print(f"Error: {e}")
 
