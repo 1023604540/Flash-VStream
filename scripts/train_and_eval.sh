@@ -24,7 +24,7 @@ deepspeed --master_addr 127.0.0.1 --master_port 12345 --include localhost:${gpus
     --deepspeed ./scripts/zero0.json \
     --model_name_or_path ./ckpt/vicuna-7b-v1.5 \
     --version plain \
-    --data_path ./data/pretrain/llava_558k_with_webvid.json \
+    --data_path /anvme/workspace/b232dd16-datasets/pretrain/llava_558k_with_webvid.json \
     --image_folder /anvme/workspace/b232dd16-datasets/blip_laion_cc_sbu_558k \
     --video_folder /anvme/workspace/b232dd16-datasets/webvid/videos \
     --vision_tower ./ckpt/clip-vit-large-patch14 \
