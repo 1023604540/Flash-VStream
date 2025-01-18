@@ -21,11 +21,12 @@ def parse_args():
     parser.add_argument("--api_type", default=None, type=str, help="OpenAI API type")
     parser.add_argument("--api_version", default=None, type=str, help="OpenAI API version")
     parser.add_argument("--api_base", default=None, type=str, help="OpenAI API base")
+    parser.add_argument("--batch_size", default=2000, type=int, help="Number of requests per batch file")
     args = parser.parse_args()
     return args
 
 
-def prepare_batch_file(prediction_set, caption_files, output_dir):
+def prepare_batch_file(prediction_set, caption_files, output_dir, batch_size):
     batch_requests = []
     for idx, file in enumerate(tqdm(caption_files)):
         key = file[:-5]  # Strip file extension
@@ -66,12 +67,17 @@ def prepare_batch_file(prediction_set, caption_files, output_dir):
                 "temperature": 0.002
             }}
             batch_requests.append(request)
+        except Exception as e:
+            print(f"Error processing {file}: {e}")
 
-        batch_file_path = os.path.join(output_dir, "batchinput.jsonl")
+    batch_files = []
+    for i in range(0, len(batch_requests), batch_size):
+        batch_file_path = os.path.join(output_dir, f"batchinput_{i//batch_size}.jsonl")
         with open(batch_file_path, "w") as f:
-            for request in batch_requests:
+            for request in batch_requests[i:i + batch_size]:
                 f.write(json.dumps(request) + "\n")
-        return batch_file_path
+        batch_files.append(batch_file_path)
+    return batch_files
 
 
 def main():
@@ -127,24 +133,35 @@ def main():
         qa_set = {"q": question, "a": answer, "pred": pred, "a_type": sample['answer_type'] if 'answer_type' in sample else None}
         prediction_set[id] = qa_set
 
-    batch_file_path = prepare_batch_file(prediction_set, caption_files, output_dir)
+    batch_files = prepare_batch_file(prediction_set, caption_files, output_dir, args.batch_size)
+
+
     # Upload the batch file
     client = OpenAI(api_key=args.api_key)
-    batch_input_file = client.files.create(
-        file=open(batch_file_path, "rb"),
-        purpose="batch"
-    )
+    batch_ids = []
+    for batch_file_path in batch_files:
+        batch_input_file = client.files.create(
+            file=open(batch_file_path, "rb"),
+            purpose="batch"
+        )
 
-    # Create the batch
-    batch_input_file_id = batch_input_file.id
-    batch = client.batches.create(
-        input_file_id=batch_input_file_id,
-        endpoint="/v1/chat/completions",
-        completion_window="24h",
-        metadata={"description": "eval job"}
-    )
+        # Create the batch
+        batch_input_file_id = batch_input_file.id
+        batch_ids.append(batch_input_file_id)
 
-    print(batch)
+        batch = client.batches.create(
+            input_file_id=batch_input_file_id,
+            endpoint="/v1/chat/completions",
+            completion_window="24h",
+            metadata={"description": "eval job"}
+        )
+
+        print(batch)
+        sleep(2)
+
+    with open(os.path.join(output_dir, "batch_ids.txt"), "w") as f:
+        for batch_id in batch_ids:
+            f.write(batch_id + "\n")
     #
     # # Combine all the processed files into one
     # combined_contents = {}
