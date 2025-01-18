@@ -1,9 +1,9 @@
 # Based on https://github.com/haotian-liu/LLaVA.
-
+import logging
 import os
 import ast
 import json
-import openai
+from openai import OpenAI
 import argparse
 from tqdm import tqdm
 from time import sleep
@@ -25,21 +25,22 @@ def parse_args():
     return args
 
 
-def annotate(prediction_set, caption_files, output_dir):
+def annotate(prediction_set, caption_files, output_dir,args):
     """
     Evaluates question and answer pairs using GPT-3
     Returns a score for correctness.
     """
     for file in tqdm(caption_files):
+        logging.info("Processing file: %s", file)
         key = file[:-5] # Strip file extension
         qa_set = prediction_set[key]
         question = qa_set['q']
         answer = qa_set['a']
         pred = qa_set['pred']
-        print("hook4")
         try:
             # Compute the correctness score
-            completion = openai.ChatCompletion.create(
+            openai = OpenAI(api_key=args.api_key)
+            completion = openai.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {
@@ -68,12 +69,10 @@ def annotate(prediction_set, caption_files, output_dir):
                 ],
                 temperature=0.002
             )
-            print("hook5")
             # Convert response to a Python dictionary.
-            response_message = completion["choices"][0]["message"]["content"]
+            response_message = completion.choices[0].message.content
             response_dict = ast.literal_eval(response_message)
             result_qa_pair = [response_dict, qa_set]
-            print("hook6")
             # Save the question-answer pairs to a json file.
             with open(f"{output_dir}/{key}.json", "w") as f:
                 json.dump(result_qa_pair, f)
@@ -137,14 +136,6 @@ def main():
         qa_set = {"q": question, "a": answer, "pred": pred, "a_type": sample['answer_type'] if 'answer_type' in sample else None}
         prediction_set[id] = qa_set
 
-    # Set the OpenAI API key.
-    openai.api_key = args.api_key # Your API key here
-    if args.api_type:
-        openai.api_type = args.api_type
-    if args.api_version:
-        openai.api_version = args.api_version
-    if args.api_base:
-        openai.api_base = args.api_base # Your API base here
     num_tasks = args.num_tasks
 
     # While loop to ensure that all captions are processed.
@@ -165,7 +156,6 @@ def main():
                 print(f"completed_files: {completed_files}")
                 print(f"failed for 5 times, break")
                 break
-            print("hook1")
             # Break the loop when there are no incomplete files
             if len(incomplete_files) == 0:
                 break
@@ -175,12 +165,10 @@ def main():
             # Split tasks into parts.
             part_len = len(incomplete_files) // num_tasks
             all_parts = [incomplete_files[i:i + part_len] for i in range(0, len(incomplete_files), part_len)]
-            task_args = [(prediction_set, part, args.output_dir) for part in all_parts]
-            print("hook2")
+            task_args = [(prediction_set, part, args.output_dir,args) for part in all_parts]
             # Use a pool of workers to process the files in parallel.
             with Pool() as pool:
                 pool.starmap(annotate, task_args)
-            print("hook3")
         except Exception as e:
             print(f"Error: {e}")
 

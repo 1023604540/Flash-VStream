@@ -90,9 +90,9 @@ def eval_msrvtt(args):
            "--num_chunks", str(num_chunks),
            "--num_tasks", "16",
            "--api_key", args.api_key,
-           #"--api_base", args.api_base,
-           #"--api_type", args.api_type,
-           #"--api_version", args.api_version,
+           "--api_base", args.api_base,
+           "--api_type", args.api_type,
+           "--api_version", args.api_version,
            ]
     exec(cmd)
 

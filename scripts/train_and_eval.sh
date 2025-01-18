@@ -127,8 +127,8 @@ do
         --dataset ${dataset} \
         --num_chunks $ngpus \
         --api_key $OPENAIKEY \
-#        --api_base $OPENAIBASE \
-#        --api_type $OPENAITYPE \
-#        --api_version $OPENAIVERSION \
+        --api_base $OPENAIBASE \
+        --api_type $OPENAITYPE \
+        --api_version $OPENAIVERSION \
         >> ${date_device}_vstream-7b-eval-${dataset}-${type}${cur_length}*${cur_size}-${long_length}*${long_size}-${Turing_length}*${Turing_size}-${suffix}.log 2>&1
 done
