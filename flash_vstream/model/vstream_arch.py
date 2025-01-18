@@ -30,7 +30,7 @@ from flash_vstream.model.multimodal_projector.builder import build_vision_projec
 from flash_vstream.constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 
 from flash_vstream.model.compress_functions import drop_feature, merge_feature, kmeans_feature, weighted_kmeans_feature, k_drop_feature, k_merge_feature, attention_feature
-from flash_vstream.model.recurrent_memory import TransformerProjector
+
 import copy
 
 class NeuralTuringMachine(nn.Module):
@@ -149,9 +149,7 @@ class VStreamMetaForCausalLM(ABC):
     def __init__(self, config):
         super(VStreamMetaForCausalLM, self).__init__(config)
         # support video streaming mode
-        # load recurrent memory 
-        self.recurrent_memory_transformer = TransformerProjector()
-        self.recurrent_memory = None
+        # load recurrent memory
         self.r_memory = None
         self.use_video_streaming_mode = False
         self.video_embedding_memory = None  # set to torch.multiprocessing.Manager.list() when launching
