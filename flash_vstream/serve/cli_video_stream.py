@@ -169,7 +169,7 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
         time.sleep(0.1)
     logger.info(f'Simulator Process: end')
 
-def frame_memory_manager_origin(model, image_processor, frame_queue, log_queue):
+def frame_memory_manager(model, image_processor, frame_queue, log_queue):
     ############## Start sub process-3: Memory Manager #############
     worker_configurer(log_queue)
     logger = logging.getLogger(__name__)
@@ -208,53 +208,6 @@ def frame_memory_manager_origin(model, image_processor, frame_queue, log_queue):
     logger.info(f'MemManager Process: end')
 
 
-def frame_memory_manager(model, image_processor, frame_queue, log_queue):
-    ############## Start sub process-3: Memory Manager #############
-    worker_configurer(log_queue)
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-
-    time_meter = MetricMeter()
-    logger.info(f'MemManager Process: start')
-    frame_cnt = 0
-    chunk_length = 25
-    chunk_count = 0
-    chunk_flag = False
-    while True:
-        try:
-            if chunk_count >= chunk_length:
-                chunk_flag = True
-                chunk_count = 0
-            video_clip = frame_queue.get()  # get the video clip from the queue (from the video stream simulator)
-            # print("video_clip get shape = ", video_clip.shape)
-            # FIFO queue, retrieves the oldest element in the queue
-            start_time = time.perf_counter()
-            if video_clip is None:
-                logger.info(f'MemManager: Ooops, get None')
-                break
-            logger.info(f'MemManager: get {video_clip.shape[0]} frames from queue')
-            image = image_processor.preprocess(video_clip, return_tensors='pt')['pixel_values']  # preprocess the video clip and return pytorch tensor
-            image = image.unsqueeze(0)
-            image_tensor = image.to(model.device, dtype=torch.float16)
-            # time_2 = time.perf_counter()
-            logger.info(f'MemManager: Start embedding')
-            with torch.inference_mode():
-                model.embed_video_streaming(image_tensor, chunk_flag)  # embed the video clip, create the memory
-            logger.info(f'MemManager: End embedding')
-            end_time = time.perf_counter()
-            if frame_cnt > 0:
-                time_meter.add('memory_latency', end_time - start_time)
-                logger.info(f'MemManager: embedded {video_clip.shape[0]} frames,\tidx={frame_cnt},\tmemory_latency={time_meter["memory_latency"]}')
-            else:
-                logger.info(f'MemManager: embedded {video_clip.shape[0]} frames,\tidx={frame_cnt},\tmemory_latency={end_time - start_time:.6f}, not logged')
-            frame_cnt += video_clip.shape[0]
-            chunk_count += video_clip.shape[0]
-            print("chunk_count = ", chunk_count, "chunk_flag = ", chunk_flag)
-            chunk_flag = False
-        except Exception as e:
-            print(f'MemManager Exception: {e}')
-            time.sleep(0.1)
-    logger.info(f'MemManager Process: end')
 
 def main(args):
     # torch.multiprocessing.log_to_stderr(logging.DEBUG)
