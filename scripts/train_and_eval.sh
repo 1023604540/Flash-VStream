@@ -2,10 +2,12 @@
 
 # set up python environment
 conda activate vstream1
+export http_proxy=http://proxy:80
+export https_proxy=http://proxy:80
 
 # set important configurations
 type=weighted_kmeans
-suffix=STAR
+suffix=evaluation
 cur_length=1
 cur_size=8
 long_length=25
@@ -116,10 +118,12 @@ date_device="$(date +%m%d)_${ngpus}${gputype}"
 
 echo start eval
 # define your openai info here
-OPENAIKEY=$()
-
+OPENAIKEY=
+OPENAIBASE="https://api.openai.com"
+OPENAITYPE="openai"
+OPENAIVERSION="v1"
 #for dataset in actnet nextoe msvd msrvtt vsmovienet vsego4d realtime_vsmovienet realtime_vsego4d
-for dataset in msvd msrvtt
+for dataset in actnet
 do
     echo start eval ${dataset}
     python -m flash_vstream.eval_video.eval_any_dataset_features \
