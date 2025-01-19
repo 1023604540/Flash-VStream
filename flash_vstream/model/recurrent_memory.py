@@ -194,8 +194,8 @@ class TransformerProjector(nn.Module):
         # configuration for memory
         self.num_memory_tokens = self.config.num_memory_tokens
         self.read_memory_emb = nn.Parameter(torch.randn(self.num_memory_tokens, self.config.mm_hidden_size))
-        self.read_memory_emb = torch.randn(self.num_memory_tokens, self.config.mm_hidden_size)
         self.batch_size = None
+        self.recurrent_memory_projector = nn.Linear(self.config.mm_hidden_size, self.config.mm_hidden_size)
 
         # self.memory_tokens = nn.Parameter(torch.randn(self.num_memory_tokens, config.mm_hidden_size))
 
@@ -274,6 +274,7 @@ class TransformerProjector(nn.Module):
             all_hidden_states = all_hidden_states + (hidden_states,)
         # if not is_image:
         read_memories, hidden_states = unpack(hidden_states, ps, 'b * d')
+        read_memories = self.recurrent_memory_projector(read_memories)
         # proj_hidden_states = self.proj(hidden_states)
 
         # if output_attentions:
