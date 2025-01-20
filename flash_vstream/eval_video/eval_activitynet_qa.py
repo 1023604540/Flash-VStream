@@ -139,6 +139,7 @@ def main():
     # Upload the batch file
     client = OpenAI(api_key=args.api_key)
     batch_ids = []
+    batch_input_file_ids = []
     for batch_file_path in batch_files:
         batch_input_file = client.files.create(
             file=open(batch_file_path, "rb"),
@@ -147,7 +148,7 @@ def main():
 
         # Create the batch
         batch_input_file_id = batch_input_file.id
-        batch_ids.append(batch_input_file_id)
+        batch_input_file_ids.append(batch_input_file_id)
 
         batch = client.batches.create(
             input_file_id=batch_input_file_id,
@@ -157,11 +158,16 @@ def main():
         )
 
         print(batch)
+        batch_id = batch.id
+        batch_ids.append(batch_id)
         sleep(2)
 
     with open(os.path.join(output_dir, "batch_ids.txt"), "w") as f:
         for batch_id in batch_ids:
             f.write(batch_id + "\n")
+    with open(os.path.join(output_dir, "batch_input_file_ids.txt"), "w") as f:
+        for batch_input_file_id in batch_input_file_ids:
+            f.write(batch_input_file_id + "\n")
     #
     # # Combine all the processed files into one
     # combined_contents = {}
