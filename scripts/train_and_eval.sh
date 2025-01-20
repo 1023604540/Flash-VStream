@@ -7,7 +7,7 @@ export https_proxy=http://proxy:80
 
 # set important configurations
 type=weighted_kmeans
-suffix=evaluation
+suffix=STAR
 cur_length=1
 cur_size=8
 long_length=25
