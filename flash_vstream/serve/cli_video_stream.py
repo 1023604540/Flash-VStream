@@ -141,9 +141,9 @@ def video_stream_similator(video_file, frame_queue, log_queue, video_fps=1.0, pl
     worker_configurer(log_queue)
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-    print(f"Video file: {video_file}")
+    logger.info(f"Video file: {video_file}")
     vr = VideoReader(video_file)  # read the video file
-    print(f"Video loaded with {len(vr)} frames")
+    logger.info(f"Video loaded with {len(vr)} frames")
     sample_fps = round(vr.get_avg_fps() / video_fps)
     frame_idx = [i for i in range(0, len(vr), sample_fps)]
     video = vr.get_batch(frame_idx).asnumpy()
