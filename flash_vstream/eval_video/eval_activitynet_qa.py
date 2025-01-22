@@ -10,6 +10,7 @@ from time import sleep
 from collections import defaultdict
 from multiprocessing.pool import Pool
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="question-answer-generation-using-gpt-3")
     parser.add_argument("--pred_path", required=True, help="The path to file containing prediction.")
@@ -21,11 +22,12 @@ def parse_args():
     parser.add_argument("--api_type", default=None, type=str, help="OpenAI API type")
     parser.add_argument("--api_version", default=None, type=str, help="OpenAI API version")
     parser.add_argument("--api_base", default=None, type=str, help="OpenAI API base")
+    parser.add_argument("--batch_size", default=2000, type=int, help="Number of requests per batch file")
     args = parser.parse_args()
     return args
 
 
-def prepare_batch_file(prediction_set, caption_files, output_dir):
+def prepare_batch_file(prediction_set, caption_files, output_dir, batch_size):
     batch_requests = []
     for idx, file in enumerate(tqdm(caption_files)):
         key = file[:-5]  # Strip file extension
@@ -37,41 +39,46 @@ def prepare_batch_file(prediction_set, caption_files, output_dir):
             # Prepare the request
             request = {"custom_id": key, "method": "POST", "url": "/v1/chat/completions", "body":
                 {
-                "model": "gpt-3.5-turbo",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": 
-                            "You are an intelligent chatbot designed for evaluating the correctness of generative outputs for question-answer pairs. "
-                            "Your task is to compare the predicted answer with the correct answer and determine if they match meaningfully. Here's how you can accomplish the task:"
-                            "------"
-                            "##INSTRUCTIONS: "
-                            "- Focus on the meaningful match between the predicted answer and the correct answer.\n"
-                            "- Consider synonyms or paraphrases as valid matches.\n"
-                            "- Evaluate the correctness of the prediction compared to the answer."
-                    },
-                    {
-                        "role": "user",
-                        "content":
-                            "Please evaluate the following video-based question-answer pair:\n\n"
-                            f"Question: {question}\n"
-                            f"Correct Answer: {answer}\n"
-                            f"Predicted Answer: {pred}\n\n"
-                            "Provide your evaluation only as a yes/no and score where the score is an integer value between 0 and 5, with 5 indicating the highest meaningful match. "
-                            "Please generate the response in the form of a Python dictionary string with keys 'pred' and 'score', where value of 'pred' is  a string of 'yes' or 'no' and value of 'score' is in INTEGER, not STRING."
-                            "DO NOT PROVIDE ANY OTHER OUTPUT TEXT OR EXPLANATION. Only provide the Python dictionary string. "
-                            "For example, your response should look like this: {'pred': 'yes', 'score': 4.8}."
-                    }
-                ],
-                "temperature": 0.002
-            }}
+                    "model": "gpt-3.5-turbo",
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content":
+                                "You are an intelligent chatbot designed for evaluating the correctness of generative outputs for question-answer pairs. "
+                                "Your task is to compare the predicted answer with the correct answer and determine if they match meaningfully. Here's how you can accomplish the task:"
+                                "------"
+                                "##INSTRUCTIONS: "
+                                "- Focus on the meaningful match between the predicted answer and the correct answer.\n"
+                                "- Consider synonyms or paraphrases as valid matches.\n"
+                                "- Evaluate the correctness of the prediction compared to the answer."
+                        },
+                        {
+                            "role": "user",
+                            "content":
+                                "Please evaluate the following video-based question-answer pair:\n\n"
+                                f"Question: {question}\n"
+                                f"Correct Answer: {answer}\n"
+                                f"Predicted Answer: {pred}\n\n"
+                                "Provide your evaluation only as a yes/no and score where the score is an integer value between 0 and 5, with 5 indicating the highest meaningful match. "
+                                "Please generate the response in the form of a Python dictionary string with keys 'pred' and 'score', where value of 'pred' is  a string of 'yes' or 'no' and value of 'score' is in INTEGER, not STRING."
+                                "DO NOT PROVIDE ANY OTHER OUTPUT TEXT OR EXPLANATION. Only provide the Python dictionary string. "
+                                "For example, your response should look like this: {'pred': 'yes', 'score': 4.8}."
+                        }
+                    ],
+                    "temperature": 0.002
+                }}
             batch_requests.append(request)
+        except Exception as e:
+            print(f"Error processing {file}: {e}")
 
-        batch_file_path = os.path.join(output_dir, "batchinput.jsonl")
+    batch_files = []
+    for i in range(0, len(batch_requests), batch_size):
+        batch_file_path = os.path.join(output_dir, f"batchinput_{i // batch_size}.jsonl")
         with open(batch_file_path, "w") as f:
-            for request in batch_requests:
+            for request in batch_requests[i:i + batch_size]:
                 f.write(json.dumps(request) + "\n")
-        return batch_file_path
+        batch_files.append(batch_file_path)
+    return batch_files
 
 
 def main():
@@ -86,7 +93,7 @@ def main():
         for _idx in range(args.num_chunks):
             file = os.path.join(args.pred_path, f"{args.num_chunks}_{_idx}.json")
             pred_contents += [json.loads(line) for line in open(file)]
-        
+
     else:
         file = os.path.join(args.pred_path, f"pred.json")
         pred_contents = [json.loads(line) for line in open(file)]
@@ -124,27 +131,44 @@ def main():
         question = sample['question']
         answer = sample['answer']
         pred = sample['pred']
-        qa_set = {"q": question, "a": answer, "pred": pred, "a_type": sample['answer_type'] if 'answer_type' in sample else None}
+        qa_set = {"q": question, "a": answer, "pred": pred,
+                  "a_type": sample['answer_type'] if 'answer_type' in sample else None}
         prediction_set[id] = qa_set
 
-    batch_file_path = prepare_batch_file(prediction_set, caption_files, output_dir)
+    batch_files = prepare_batch_file(prediction_set, caption_files, output_dir, args.batch_size)
+
     # Upload the batch file
     client = OpenAI(api_key=args.api_key)
-    batch_input_file = client.files.create(
-        file=open(batch_file_path, "rb"),
-        purpose="batch"
-    )
+    batch_ids = []
+    batch_input_file_ids = []
+    for batch_file_path in batch_files:
+        batch_input_file = client.files.create(
+            file=open(batch_file_path, "rb"),
+            purpose="batch"
+        )
 
-    # Create the batch
-    batch_input_file_id = batch_input_file.id
-    batch = client.batches.create(
-        input_file_id=batch_input_file_id,
-        endpoint="/v1/chat/completions",
-        completion_window="24h",
-        metadata={"description": "eval job"}
-    )
+        # Create the batch
+        batch_input_file_id = batch_input_file.id
+        batch_input_file_ids.append(batch_input_file_id)
 
-    print(batch)
+        batch = client.batches.create(
+            input_file_id=batch_input_file_id,
+            endpoint="/v1/chat/completions",
+            completion_window="24h",
+            metadata={"description": "eval job"}
+        )
+
+        print(batch)
+        batch_id = batch.id
+        batch_ids.append(batch_id)
+        sleep(2)
+
+    with open(os.path.join(output_dir, "batch_ids.txt"), "w") as f:
+        for batch_id in batch_ids:
+            f.write(batch_id + "\n")
+    with open(os.path.join(output_dir, "batch_input_file_ids.txt"), "w") as f:
+        for batch_input_file_id in batch_input_file_ids:
+            f.write(batch_input_file_id + "\n")
     #
     # # Combine all the processed files into one
     # combined_contents = {}
@@ -254,6 +278,7 @@ def main():
     # args.output_csv = args.output_json.replace(".json", ".csv")
     # with open(args.output_csv, 'w') as f:
     #     f.write(output)
+
 
 if __name__ == "__main__":
     main()
