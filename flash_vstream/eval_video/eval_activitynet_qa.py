@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument("--api_type", default=None, type=str, help="OpenAI API type")
     parser.add_argument("--api_version", default=None, type=str, help="OpenAI API version")
     parser.add_argument("--api_base", default=None, type=str, help="OpenAI API base")
-    parser.add_argument("--batch_size", default=2000, type=int, help="Number of requests per batch file")
+    parser.add_argument("--batch_size", default=1000, type=int, help="Number of requests per batch file")
     args = parser.parse_args()
     return args
 
