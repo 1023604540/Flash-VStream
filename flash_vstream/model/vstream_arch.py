@@ -168,7 +168,7 @@ class VStreamMetaForCausalLM(ABC):
     def get_vision_tower(self):
         return self.get_model().get_vision_tower()
 
-    def encode_images(self, images):
+    def encode_images(self, images):  # extract VIT features from images
         image_features = self.get_model().get_vision_tower()(images)
         return image_features
 
@@ -383,6 +383,7 @@ class VStreamMetaForCausalLM(ABC):
                                         f'while video_sample_type = {compress_type} is not supported yet.')
         new_image_features = []
         for img_feature in image_features:  # [T, P*P, D]
+
             boundaries = segment(img_feature.mean(dim=1))
             segments = []
             prev_idx = 0
@@ -393,6 +394,7 @@ class VStreamMetaForCausalLM(ABC):
             recurrent_memory = None
             for segment_features in segments:
                 cur_start = min(self.config.video_current_memory_length, segment_features.shape[0])
+                ### Calc Spatial Memory
                 if cur_start == 0:
                     cur_memory = segment_features[:0]
                     long_memory = segment_features
@@ -405,6 +407,7 @@ class VStreamMetaForCausalLM(ABC):
                     long_memory = self.compress_spatial_features(long_memory, compress_long_memory_size)
                 if compress_Turing_memory_size * compress_Turing_memory_size != Turing_memory.shape[1]:
                     Turing_memory = self.compress_spatial_features(Turing_memory, compress_Turing_memory_size)
+                ### Calc Temporal Memory
                 if video_long_memory_length == 0 or long_memory.shape[0] == 0:
                     long_memory_compreesed = long_memory[:0]
                 else:
@@ -430,6 +433,7 @@ class VStreamMetaForCausalLM(ABC):
                 memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
                 compressed_segments.append(memory_feature)
             new_image_features.append(torch.cat(compressed_segments, dim=0))
+
         return new_image_features
 
     def cat_proj(self, all_features):  # concatenate features and project them together

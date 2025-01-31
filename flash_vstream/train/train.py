@@ -840,15 +840,31 @@ class DataCollatorForSupervisedDataset(object):
             attention_mask=input_ids.ne(self.tokenizer.pad_token_id),
         )
 
-        if 'feature' in instances[0]:
-            batch['features'] = [instance['feature'] for instance in instances]
-        elif 'image' in instances[0]:
-            images = [instance['image'] for instance in instances]
+        # if 'feature' in instances[0]:
+        #     batch['features'] = [instance['feature'] for instance in instances]
+        # elif 'image' in instances[0]:
+        #     images = [instance['image'] for instance in instances]
+        #     if all(x is not None and x.shape == images[0].shape for x in images):
+        #         batch['images'] = torch.stack(images)
+        #     else:
+        #         batch['images'] = images
+
+        # Handle features
+        if any('feature' in instance for instance in instances):
+            features = [
+                instance.get('feature') for instance in instances if 'feature' in instance
+            ]
+            batch['features'] = features
+
+        # Handle images
+        if any('image' in instance for instance in instances):
+            images = [
+                instance.get('image') for instance in instances if 'image' in instance
+            ]
             if all(x is not None and x.shape == images[0].shape for x in images):
-                batch['images'] = torch.stack(images)
+                batch['images'] = torch.stack(images)  # Stack images if shapes match
             else:
-                batch['images'] = images
-        
+                batch['images'] = images  # Keep as a list if shapes differ
 
         return batch
 
@@ -1028,6 +1044,16 @@ def train():
     data_args.mm_hidden_size = model.get_vision_tower().hidden_size
     data_module = make_supervised_data_module(tokenizer=tokenizer,
                                               data_args=data_args)
+    # add hook to track the backpropagation of gradients
+    # def gradient_hook(grad, param_name):
+    #     grad_detached = grad.detach()
+    #     print(f"Gradient for {param_name}: max={grad_detached.abs().max().item()}, "
+    #           f"mean={grad_detached.mean().item()}, shape={grad_detached.size()}")
+    #
+    # for name, param in model.named_parameters():
+    #     if param.requires_grad:
+    #         param.register_hook(lambda grad, param_name=name: gradient_hook(grad, param_name))
+
     trainer = VStreamTrainer(model=model,
                     tokenizer=tokenizer,
                     args=training_args,
@@ -1055,6 +1081,7 @@ def train():
     else:
         safe_save_model_for_hf_trainer(trainer=trainer,
                                        output_dir=training_args.output_dir)
+
 
 
 if __name__ == "__main__":

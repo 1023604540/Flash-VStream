@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # set up python environment
-conda activate vstream
-
+conda activate vstream1
+export http_proxy=http://proxy:80
+export https_proxy=http://proxy:80
 # set important configurations
 ngpus=8
 gputype=A100

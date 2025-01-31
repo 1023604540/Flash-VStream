@@ -1,6 +1,10 @@
-/home/vault/b232dd/b232dd21/vlm/Flash-VStream/scripts/realtime_cli.sh
-/home/vault/b232dd/b232dd21/vlm/Flash-VStream/scripts/train_and_eval.sh
-/home/vault/b232dd/b232dd21/vlm/Flash-VStream/data
-/home/vault/b232dd/b232dd21/vlm/Flash-VStream/ckpt
-/home/vault/b232dd/b232dd21/vlm/Flash-VStream/Flash-VStream-7b
+scripts/realtime_cli.sh
+scripts/train_and_eval.sh
+scripts/realtime_cli.log
+scripts/
+data/
+ckpt/
+vstream.egg-info/
+Flash-VStream-7b/
 **/__pycache__
+*.pyc
