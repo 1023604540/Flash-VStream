@@ -282,8 +282,8 @@ class Config:
 # encoder_attention_mask = None  # No masking for cross-attention
 
 #
-# # Usage
-# hidden_states = torch.randn(16, 1024)  # [L=50, P=16, D=1024]
+# Usage
+# hidden_states = torch.randn(32, 1024)  # [L=50, P=16, D=1024]
 # old_read_memories = torch.randn(1, 16, 1024)  # [B, num_memory_tokens, D]
 # model = TransformerProjector()
 # output = model(
