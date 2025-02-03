@@ -168,7 +168,7 @@ class VStreamMetaForCausalLM(ABC):
     def get_vision_tower(self):
         return self.get_model().get_vision_tower()
 
-    def encode_images(self, images):
+    def encode_images(self, images):  # extract VIT features from images
         image_features = self.get_model().get_vision_tower()(images)
         return image_features
 
@@ -430,6 +430,7 @@ class VStreamMetaForCausalLM(ABC):
                 memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
                 compressed_segments.append(memory_feature)
             new_image_features.append(torch.cat(compressed_segments, dim=0))
+            
         return new_image_features
 
     def cat_proj(self, all_features):  # concatenate features and project them together
