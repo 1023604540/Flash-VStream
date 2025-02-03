@@ -389,7 +389,6 @@ class VStreamMetaForCausalLM(ABC):
             for idx in boundaries:
                 segments.append(img_feature[prev_idx: idx + 1])  # Extract each segment
                 prev_idx = idx + 1
-            compressed_segments = []
             recurrent_memory = None
             for segment_features in segments:
                 cur_start = min(self.config.video_current_memory_length, segment_features.shape[0])
@@ -427,10 +426,8 @@ class VStreamMetaForCausalLM(ABC):
                 memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
                 self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                 recurrent_memory, _ = self.recurrent_memory_transformer.forward(memory_feature, recurrent_memory)
-                memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
-                compressed_segments.append(memory_feature)
-            new_image_features.append(torch.cat(compressed_segments, dim=0))
-            
+            memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
+            new_image_features.append(memory_feature)
         return new_image_features
 
     def cat_proj(self, all_features):  # concatenate features and project them together
