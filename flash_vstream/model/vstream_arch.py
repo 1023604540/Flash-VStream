@@ -379,8 +379,27 @@ class VStreamMetaForCausalLM(ABC):
 
         return new_image_features
 
-    def retrieve_recurrent_memory(self):
-        return
+    ### Code is not complete here
+    def retrieve_recurrent_memory(self, text_query_embeddings, recurrent_memory_bank):
+        # Project text query embeddings to the same semantic space
+        projected_text_queries = self.text_projection(text_query_embeddings)  # [batch_size, projection_dim]
+
+        # Stack recurrent memories and project them
+        projected_memories = []
+        for memory in recurrent_memory_bank:
+            projected_memory = self.cat_proj(memory)  # memory: [num_tokens, hidden_size]
+            pooled_memory = projected_memory.mean(dim=0)  # Mean pool to get a single vector per memory
+            projected_memories.append(pooled_memory)
+
+        projected_memories = torch.stack(projected_memories)  # [num_memories, projection_dim]
+
+        # Compute cosine similarities
+        cos = nn.CosineSimilarity(dim=1)
+        similarities = cos(projected_memories, projected_text_queries.unsqueeze(1).expand_as(projected_memories))  # [num_memories]
+
+        # Retrieve the index with the highest similarity
+        max_sim_index = torch.argmax(similarities)
+        return max_sim_index
 
     def cat_proj(self, all_features):  # concatenate features and project them together
         feature_split_size = [x.shape[0] for x in all_features]  # patch size for each image
