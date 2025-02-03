@@ -649,7 +649,7 @@ class LazySupervisedDataset(Dataset):
                  tokenizer: transformers.PreTrainedTokenizer,
                  data_args: DataArguments):
         super(LazySupervisedDataset, self).__init__()
-        list_data_dict = json.load(open(data_path, "r"))   # load training data metadata
+        list_data_dict = json.load(open(data_path, "r"))
 
         rank0_print("Formatting inputs...Skip in lazy mode")
         self.tokenizer = tokenizer
@@ -680,14 +680,14 @@ class LazySupervisedDataset(Dataset):
         attempt, max_attempt = 0, 10
         while attempt < max_attempt:
             try:
-                sources = self.list_data_dict[i]  # load training data
+                sources = self.list_data_dict[i]
                 if isinstance(i, int):
                     sources = [sources]
                 assert len(sources) == 1, "Don't know why it is wrapped to a list"  # FIXME
                 feature = None
                 if 'image' in sources[0]:
                     image_file = self.list_data_dict[i]['image']
-                    image_folder = self.data_args.image_folder   # load images
+                    image_folder = self.data_args.image_folder
                     image_file = os.path.join(image_folder, image_file)
                     suffix = image_file.split('.')[-1]
 
@@ -711,14 +711,13 @@ class LazySupervisedDataset(Dataset):
                                     return pil_img
                                 elif width > height:
                                     result = Image.new(pil_img.mode, (width, width), background_color)
-                                    # If the width is greater than the height, a new square image with a width-sized canvas is created. The original image is pasted in the center vertically.
                                     result.paste(pil_img, (0, (width - height) // 2))
                                     return result
                                 else:
                                     result = Image.new(pil_img.mode, (height, height), background_color)
                                     result.paste(pil_img, ((height - width) // 2, 0))
                                     return result
-                            image = expand2square(image, tuple(int(x*255) for x in processor.image_mean))  # determine the padding color, scaled from [0, 1] to [0, 255]
+                            image = expand2square(image, tuple(int(x*255) for x in processor.image_mean))
                             image = processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
                         else:
                             image = processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
@@ -728,7 +727,7 @@ class LazySupervisedDataset(Dataset):
                     
                 elif 'video' in sources[0]:
                     video_file = self.list_data_dict[i]['video']
-                    video_folder = self.data_args.video_folder   # load videos
+                    video_folder = self.data_args.video_folder
                     video_file = os.path.join(video_folder, video_file)
                     suffix = video_file.split('.')[-1]
                     
