@@ -385,10 +385,11 @@ class VStreamMetaForCausalLM(ABC):
         for img_feature in image_features:  # [T, P*P, D]
             boundaries = segment(img_feature.mean(dim=1))
             segments = []
-            prev_idx = 0
+            #prev_idx = 0
             for idx in boundaries:
-                segments.append(img_feature[prev_idx: idx + 1])  # Extract each segment
-                prev_idx = idx + 1
+                #segments.append(img_feature[prev_idx: idx + 1])  # Extract each segment
+                segments.append(img_feature[0: idx + 1])  # Extract each segment
+                #prev_idx = idx + 1
             recurrent_memory = None
             for segment_features in segments:
                 cur_start = min(self.config.video_current_memory_length, segment_features.shape[0])
