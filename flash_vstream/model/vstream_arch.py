@@ -223,72 +223,72 @@ class VStreamMetaForCausalLM(ABC):
                 raise NotImplementedError(f"`compress_type` {self.config.compress_type} is not supported yet.")
         return image_features
     
-    # def compress_temporal_features(self, image_features):
-    #     video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
-    #     video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
-    #     video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
-    #     video_current_memory_length = getattr(self.config, "video_current_memory_length", 1)
-    #     compress_long_memory_size = getattr(self.config, "compress_long_memory_size", 1)
-    #     compress_Turing_memory_size = getattr(self.config, "compress_Turing_memory_size", 1)
-    #     compress_Turing_update_ratio = getattr(self.config, "compress_Turing_update_ratio", 0.2)
-    #     compress_fn_dic = {
-    #         'drop': drop_feature,
-    #         'merge': merge_feature,
-    #         'kmeans': kmeans_feature,
-    #         'weighted_kmeans': weighted_kmeans_feature,
-    #         'kdrop': k_drop_feature,
-    #         'kmerge': k_merge_feature,
-    #         'attention': attention_feature,
-    #     }
-    #     compress_type = self.config.video_sample_type
-    #     if compress_type in compress_fn_dic:
-    #         compress_fn = compress_fn_dic[compress_type]
-    #     else:
-    #         raise NotImplementedError(f'max_length = {self.config.video_max_frames},'
-    #                                     f'while video_sample_type = {compress_type} is not supported yet.')
-    #     new_image_features = []
-    #     step_indices = []
-    #     step_features = []
-    #     for img_feature in image_features:  # [T, P*P, D]
-    #         cur_start = min(video_current_memory_length, img_feature.shape[0])
-    #         ### Calc Spatial Memory
-    #         if cur_start == 0:
-    #             cur_memory = img_feature[:0]
-    #             long_memory = img_feature
-    #             Turing_memory = img_feature
-    #         else:
-    #             cur_memory = img_feature[-cur_start:]  # [C, P*P, D]
-    #             long_memory = img_feature[:-cur_start]  # [L, P*P, D]
-    #             Turing_memory = img_feature[:-cur_start]  # [L, P*P, D]
-    #         if compress_long_memory_size * compress_long_memory_size != long_memory.shape[1]:
-    #             long_memory = self.compress_spatial_features(long_memory, compress_long_memory_size) # [L, P'*P', D]
-    #         if compress_Turing_memory_size * compress_Turing_memory_size != Turing_memory.shape[1]:
-    #             Turing_memory = self.compress_spatial_features(Turing_memory, compress_Turing_memory_size) # [L, P'*P', D]
-    #         ### Calc Temporal Memory
-    #         if video_long_memory_length == 0 or long_memory.shape[0] == 0:
-    #             long_memory_compreesed = long_memory[:0]
-    #         else:
-    #             long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length) # [L_long, P'*P', D], [L_long]
-    #             ### Calc Retrieved Memory
-    #             sorted_indices = torch.argsort(weight, descending=True)  # [L_long]
-    #             key_centroids = long_memory[sorted_indices]  # [L_long, P'*P', D]
-    #             key_length = 3
-    #             if key_centroids.shape[0] > key_length:
-    #                 key_centroids = key_centroids[:key_length]
-    #             dists = ((long_memory.unsqueeze(1) - key_centroids.unsqueeze(0)) ** 2).sum(dim=3).sum(dim=2).sqrt()  # [L_long, k_L]
-    #             min_indices = torch.argmin(dists, dim=0)  # [k_L]
-    #             key_memory = img_feature[min_indices]
-    #             cur_memory = torch.cat([key_memory, cur_memory], dim=0)
-    #         ### Calc Abstract Memory
-    #         if video_Turing_memory_length == 0 or Turing_memory.shape[0] == 0:
-    #             Turing_memory_compreesed = Turing_memory[:0]
-    #         else:
-    #             Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)
-    #         memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
-    #         new_image_features.append(memory_feature)
-    #     return new_image_features
-
     def compress_temporal_features_origin(self, image_features):
+        video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
+        video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
+        video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
+        video_current_memory_length = getattr(self.config, "video_current_memory_length", 1)
+        compress_long_memory_size = getattr(self.config, "compress_long_memory_size", 1)
+        compress_Turing_memory_size = getattr(self.config, "compress_Turing_memory_size", 1)
+        compress_Turing_update_ratio = getattr(self.config, "compress_Turing_update_ratio", 0.2)
+        compress_fn_dic = {
+            'drop': drop_feature,
+            'merge': merge_feature,
+            'kmeans': kmeans_feature,
+            'weighted_kmeans': weighted_kmeans_feature,
+            'kdrop': k_drop_feature,
+            'kmerge': k_merge_feature,
+            'attention': attention_feature,
+        }
+        compress_type = self.config.video_sample_type
+        if compress_type in compress_fn_dic:
+            compress_fn = compress_fn_dic[compress_type]
+        else:
+            raise NotImplementedError(f'max_length = {self.config.video_max_frames},'
+                                        f'while video_sample_type = {compress_type} is not supported yet.')
+        new_image_features = []
+        step_indices = []
+        step_features = []
+        for img_feature in image_features:  # [T, P*P, D]
+            cur_start = min(video_current_memory_length, img_feature.shape[0])
+            ### Calc Spatial Memory
+            if cur_start == 0:
+                cur_memory = img_feature[:0]
+                long_memory = img_feature
+                Turing_memory = img_feature
+            else:
+                cur_memory = img_feature[-cur_start:]  # [C, P*P, D]
+                long_memory = img_feature[:-cur_start]  # [L, P*P, D]
+                Turing_memory = img_feature[:-cur_start]  # [L, P*P, D]
+            if compress_long_memory_size * compress_long_memory_size != long_memory.shape[1]:
+                long_memory = self.compress_spatial_features(long_memory, compress_long_memory_size) # [L, P'*P', D]
+            if compress_Turing_memory_size * compress_Turing_memory_size != Turing_memory.shape[1]:
+                Turing_memory = self.compress_spatial_features(Turing_memory, compress_Turing_memory_size) # [L, P'*P', D]
+            ### Calc Temporal Memory
+            if video_long_memory_length == 0 or long_memory.shape[0] == 0:
+                long_memory_compreesed = long_memory[:0]
+            else:
+                long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length) # [L_long, P'*P', D], [L_long]
+                ### Calc Retrieved Memory
+                sorted_indices = torch.argsort(weight, descending=True)  # [L_long]
+                key_centroids = long_memory[sorted_indices]  # [L_long, P'*P', D]
+                key_length = 3
+                if key_centroids.shape[0] > key_length:
+                    key_centroids = key_centroids[:key_length]
+                dists = ((long_memory.unsqueeze(1) - key_centroids.unsqueeze(0)) ** 2).sum(dim=3).sum(dim=2).sqrt()  # [L_long, k_L]
+                min_indices = torch.argmin(dists, dim=0)  # [k_L]
+                key_memory = img_feature[min_indices]
+                cur_memory = torch.cat([key_memory, cur_memory], dim=0)
+            ### Calc Abstract Memory
+            if video_Turing_memory_length == 0 or Turing_memory.shape[0] == 0:
+                Turing_memory_compreesed = Turing_memory[:0]
+            else:
+                Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)
+            memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
+            new_image_features.append(memory_feature)
+        return new_image_features
+
+    def compress_temporal_features_v1(self, image_features):
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
         video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
         video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
@@ -358,7 +358,7 @@ class VStreamMetaForCausalLM(ABC):
             new_image_features.append(memory_feature)
         return new_image_features
     
-    def compress_temporal_features(self, image_features):
+    def compress_temporal_features_v2(self, image_features):
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
         video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
         video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
@@ -430,6 +430,292 @@ class VStreamMetaForCausalLM(ABC):
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
             new_image_features.append(memory_feature)
         return new_image_features
+    
+    def compress_temporal_features(self, image_features, query_features=None):
+        video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
+        video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
+        video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
+        video_current_memory_length = getattr(self.config, "video_current_memory_length", 1)
+        compress_long_memory_size = getattr(self.config, "compress_long_memory_size", 1)
+        compress_Turing_memory_size = getattr(self.config, "compress_Turing_memory_size", 1)
+        compress_Turing_update_ratio = getattr(self.config, "compress_Turing_update_ratio", 0.2)
+        compress_fn_dic = {
+            'drop': drop_feature,
+            'merge': merge_feature,
+            'kmeans': kmeans_feature,
+            'weighted_kmeans': weighted_kmeans_feature,
+            'kdrop': k_drop_feature,
+            'kmerge': k_merge_feature,
+            'attention': attention_feature,
+        }
+        compress_type = self.config.video_sample_type
+        if compress_type in compress_fn_dic:
+            compress_fn = compress_fn_dic[compress_type]
+        else:
+            raise NotImplementedError(f'max_length = {self.config.video_max_frames},'
+                                        f'while video_sample_type = {compress_type} is not supported yet.')
+        new_image_features = []
+        for image_idx, img_feature in enumerate(image_features):  # [T, P*P, D]
+            boundaries = segment(img_feature.mean(dim=1))
+            segments = []
+            #prev_idx = 0
+            for idx in boundaries:
+                #segments.append(img_feature[prev_idx: idx + 1])  # Extract each segment
+                segments.append(img_feature[0: idx + 1])  # Extract each segment
+                #prev_idx = idx + 1
+            recurrent_memory = None
+            recurrent_memory_segments = []
+            query_embedding = query_features[image_idx]
+            for segment_features in segments:
+                cur_start = min(self.config.video_current_memory_length, segment_features.shape[0])
+                if cur_start == 0:
+                    cur_memory = segment_features[:0]
+                    long_memory = segment_features
+                    Turing_memory = segment_features
+                else:
+                    cur_memory = segment_features[-cur_start:]  # Current memory
+                    long_memory = segment_features[:-cur_start]  # Long memory
+                    Turing_memory = segment_features[:-cur_start]  # Turing memory
+                if compress_long_memory_size * compress_long_memory_size != long_memory.shape[1]:
+                    long_memory = self.compress_spatial_features(long_memory, compress_long_memory_size)
+                if compress_Turing_memory_size * compress_Turing_memory_size != Turing_memory.shape[1]:
+                    Turing_memory = self.compress_spatial_features(Turing_memory, compress_Turing_memory_size)
+                if video_long_memory_length == 0 or long_memory.shape[0] == 0:
+                    long_memory_compreesed = long_memory[:0]
+                else:
+                    long_memory_compreesed, weight, step_long_indices = compress_fn(long_memory, video_long_memory_length) # [L_long, P'*P', D], [L_long]
+                    ### Calc Retrieved Memory
+                    sorted_indices = torch.argsort(weight, descending=True)  # [L_long]
+                    key_centroids = long_memory[sorted_indices]  # [L_long, P'*P', D]
+                    key_length = 3
+                    if key_centroids.shape[0] > key_length:
+                        key_centroids = key_centroids[:key_length]
+                    dists = ((long_memory.unsqueeze(1) - key_centroids.unsqueeze(0)) ** 2).sum(dim=3).sum(dim=2).sqrt()  # [L_long, k_L]
+                    min_indices = torch.argmin(dists, dim=0)  # [k_L]
+                    key_memory = img_feature[min_indices]
+                    cur_memory = torch.cat([key_memory, cur_memory], dim=0)
+                ### Calc Abstract Memory
+                if video_Turing_memory_length == 0 or Turing_memory.shape[0] == 0:
+                    Turing_memory_compreesed = Turing_memory[:0]
+                else:
+                    Turing_memory_compreesed, _ = attention_feature(Turing_memory, video_Turing_memory_length, self.attention, update_ratio=compress_Turing_update_ratio)
+                memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1)], dim=0)
+                self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
+                recurrent_memory, _ = self.recurrent_memory_transformer.forward(memory_feature, recurrent_memory)
+                recurrent_memory_segments.append(recurrent_memory)
+            picked_idx = self.query_match(query_embedding, recurrent_memory_segments)
+            recurrent_memory = recurrent_memory_segments[picked_idx]
+            memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
+            new_image_features.append(memory_feature)
+        return new_image_features
+
+    def query_match(self, query_embedding, recurrent_memory_segments):
+        max_avg_similarity = -1  # 初始化为最低值
+        best_segment_idx = -1    # 用于记录最优片段索引
+
+        for idx, segment_features in enumerate(recurrent_memory_segments):
+            # 计算每个片段中所有特征向量与 query 的余弦相似度
+            similarities = F.cosine_similarity(segment_features, query_embedding.unsqueeze(0), dim=1)
+            avg_similarity = similarities.mean().item() 
+
+            if avg_similarity > max_avg_similarity:
+                max_avg_similarity = avg_similarity
+                best_segment_idx = idx
+
+        return best_segment_idx
+
+    def prepare_inputs_labels_for_multimodal(
+        self,
+        input_ids,
+        position_ids,
+        attention_mask,
+        past_key_values,
+        labels,
+        images,
+        features
+    ):
+        
+        _labels = labels
+        _position_ids = position_ids
+        _attention_mask = attention_mask
+        if attention_mask is None:
+            attention_mask = torch.ones_like(input_ids, dtype=torch.bool)
+        else:
+            attention_mask = attention_mask.bool()
+        if position_ids is None:
+            position_ids = torch.arange(0, input_ids.shape[1], dtype=torch.long, device=input_ids.device)
+        if labels is None:  # if labels are not provided, use IGNORE_INDEX. This tells the model to ignore these tokens for loss computation.
+            labels = torch.full_like(input_ids, IGNORE_INDEX)
+
+        # remove the padding using attention_mask -- TODO: double check
+        input_ids = [cur_input_ids[cur_attention_mask] for cur_input_ids, cur_attention_mask in zip(input_ids, attention_mask)] # only input_ids with True in attention mask are kept
+        labels = [cur_labels[cur_attention_mask] for cur_labels, cur_attention_mask in zip(labels, attention_mask)] # only labels with True in attention mask are kept
+        new_input_embeds = []
+        new_labels = []
+        split_sizes_batch = []
+        for batch_idx, cur_input_ids in enumerate(input_ids):
+            num_images = (cur_input_ids == IMAGE_TOKEN_INDEX).sum() # count number of image tokens in the input_ids
+            if num_images == 0:
+                cur_image_features = image_features[cur_image_idx]
+                cur_input_embeds = self.get_model().embed_tokens(cur_input_ids)
+                new_input_embeds.append(cur_input_embeds)
+                new_labels.append(labels[batch_idx])
+                split_sizes_batch.append([])
+                continue
+
+            image_token_indices = [-1] + torch.where(cur_input_ids == IMAGE_TOKEN_INDEX)[0].tolist() + [cur_input_ids.shape[0]]  # only input first image_token
+            cur_input_ids_noim = []
+            cur_labels = labels[batch_idx]
+            cur_labels_noim = []
+            for i in range(len(image_token_indices) - 1):
+                cur_input_ids_noim.append(cur_input_ids[image_token_indices[i]+1:image_token_indices[i+1]])
+                cur_labels_noim.append(cur_labels[image_token_indices[i]+1:image_token_indices[i+1]])
+            split_sizes = [x.shape[0] for x in cur_labels_noim]
+            split_sizes_batch.append(split_sizes)
+            cur_input_embeds = self.get_model().embed_tokens(torch.cat(cur_input_ids_noim))
+            cur_input_embeds_no_im = torch.split(cur_input_embeds, split_sizes, dim=0)
+            cur_new_input_embeds = []
+            cur_new_labels = []
+
+            for i in range(num_images + 1):
+                cur_new_input_embeds.append(cur_input_embeds_no_im[i])
+                cur_new_labels.append(cur_labels_noim[i])
+
+            cur_new_input_embeds = torch.cat(cur_new_input_embeds)
+            cur_new_labels = torch.cat(cur_new_labels)
+
+            new_input_embeds.append(cur_new_input_embeds)
+            new_labels.append(cur_new_labels)
+
+        vision_tower = self.get_vision_tower()
+        if vision_tower is None or (images is None and features is None) or input_ids.shape[1] == 1:
+            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids.shape[1] == 1:
+                target_shape = past_key_values[-1][-1].shape[-2] + 1
+                if target_shape - attention_mask.shape[1] >= 0:
+                    attention_mask = torch.cat((attention_mask, torch.ones(
+                        (attention_mask.shape[0], target_shape - attention_mask.shape[1]),
+                        dtype=attention_mask.dtype,
+                        device=attention_mask.device
+                    )), dim=1)
+                elif target_shape - attention_mask.shape[1] < 0:
+                    attention_mask = attention_mask[:, :target_shape]
+                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1  # represents the position of the last valid token in the sequence
+            return input_ids, position_ids, attention_mask, past_key_values, None, labels
+
+        if (features is not None) or (type(images) is list) or (images.ndim == 5):
+            compress_size = getattr(self.config, "compress_size", 1)
+            if images is not None:
+                images = [image if len(image.shape) == 4 else image.unsqueeze(0) for image in images]  # [B, T, C, H, W]
+                concat_images = torch.cat([image for image in images], dim=0)  # [B*T, C, H, W]
+                image_features = self.encode_images(concat_images)  # [B*T, P, D]
+                if getattr(self.config, 'mm_use_4_vision_tokens', False):
+                    image_features = self.reshape_2x2_image_features(image_features)  # [B*T, P/4, 4*D]
+                image_features = self.compress_spatial_features(image_features, compress_size)  # [B*T, P', D]  # compress spatial features
+                split_sizes = [image.shape[0] for image in images]
+                image_features = torch.split(image_features, split_sizes, dim=0)  # [B, T, P, D]
+            else:
+                image_features = [feat if len(feat.shape) == 3 else feat.unsqueeze(0) for feat in features]
+                origin_img_features = image_features
+                if getattr(self.config, 'mm_use_4_vision_tokens', False):
+                    image_features = [self.reshape_2x2_image_features(img_feature) for img_feature in image_features]  # [B*T, P/4, 4*D]
+                image_features = [self.compress_spatial_features(image_feature, compress_size) for image_feature in image_features]  # [B*T, P', D]
+            # perform memory consolidation
+            image_features = self.compress_temporal_features(image_features, new_input_embeds)  # [B, TP, D]  # Building memory by calling [compress_temporal_features] function
+            image_features = [x.to(self.device) for x in image_features]  # [B, TP, D]
+            image_features = self.cat_proj(image_features)
+        else:
+            image_features = self.encode_images(images).to(self.device)  # [B, 576, 2048]
+            if getattr(self.config, 'mm_use_4_vision_tokens', False):
+                image_features = self.reshape_2x2_image_features(image_features)  # [B*T, P/4, 4*D]
+            image_features = self.get_model().mm_projector(image_features)
+        
+        cur_image_idx = 0
+        for batch_idx, cur_input_ids in enumerate(input_ids):
+            num_images = (cur_input_ids == IMAGE_TOKEN_INDEX).sum() # count number of image tokens in the input_ids
+            if num_images == 0:
+                new_input_embeds[batch_idx] = torch.cat((new_input_embeds[batch_idx], image_features[cur_image_idx][0:0]), dim=0)
+                cur_image_idx += 1
+                continue
+
+            cur_new_input_embeds = []
+            cur_new_labels = []
+
+            cur_input_embeds_no_im = torch.split(new_input_embeds[batch_idx], split_sizes_batch[batch_idx], dim=0)
+            cur_label_no_im = torch.split(new_labels[batch_idx], split_sizes_batch[batch_idx], dim=0)
+
+            for i in range(num_images + 1):
+                cur_new_input_embeds.append(cur_input_embeds_no_im[i])
+                cur_new_labels.append(cur_label_no_im[i])
+                
+                if i < num_images:
+                    cur_image_features = image_features[cur_image_idx]
+                    cur_image_idx += 1
+                    cur_new_input_embeds.append(cur_image_features)
+                    cur_new_labels.append(torch.full((cur_image_features.shape[0],), IGNORE_INDEX, device=new_labels[0].device, dtype=new_labels[0].dtype))
+
+            cur_new_input_embeds = torch.cat(cur_new_input_embeds)
+            cur_new_labels = torch.cat(cur_new_labels)
+
+            new_input_embeds[batch_idx] = cur_new_input_embeds
+            new_labels[batch_idx] = cur_new_labels
+            assert cur_image_idx <= len(image_features), f"cur_image_idx ({cur_image_idx}) 超出 image_features 长度 ({len(image_features)})"
+                
+        # TODO: image start / end is not implemented here to support pretraining.
+        if getattr(self.config, 'tune_mm_mlp_adapter', False) and getattr(self.config, 'mm_use_im_start_end', False):
+            raise NotImplementedError
+    
+        # Truncate sequences to max length as image embeddings can make the sequence longer
+        tokenizer_model_max_length = getattr(self.config, 'tokenizer_model_max_length', None)
+        if tokenizer_model_max_length is not None:
+            new_input_embeds = [x[:tokenizer_model_max_length] for x in new_input_embeds]
+            new_labels = [x[:tokenizer_model_max_length] for x in new_labels]
+
+        # Combine them
+        max_len = max(x.shape[0] for x in new_input_embeds)
+        batch_size = len(new_input_embeds)
+
+        new_input_embeds_padded = []
+        new_labels_padded = torch.full((batch_size, max_len), IGNORE_INDEX, dtype=new_labels[0].dtype, device=new_labels[0].device)
+        attention_mask = torch.zeros((batch_size, max_len), dtype=attention_mask.dtype, device=attention_mask.device)
+        position_ids = torch.zeros((batch_size, max_len), dtype=position_ids.dtype, device=position_ids.device)
+
+        for i, (cur_new_embed, cur_new_labels) in enumerate(zip(new_input_embeds, new_labels)):
+            cur_len = cur_new_embed.shape[0]
+            if getattr(self.config, 'tokenizer_padding_side', 'right') == "left":
+                new_input_embeds_padded.append(torch.cat((
+                    torch.zeros((max_len - cur_len, cur_new_embed.shape[1]), dtype=cur_new_embed.dtype, device=cur_new_embed.device),
+                    cur_new_embed
+                ), dim=0))
+                if cur_len > 0:
+                    new_labels_padded[i, -cur_len:] = cur_new_labels
+                    attention_mask[i, -cur_len:] = True
+                    position_ids[i, -cur_len:] = torch.arange(0, cur_len, dtype=position_ids.dtype, device=position_ids.device)
+            else:
+                new_input_embeds_padded.append(torch.cat((
+                    cur_new_embed,
+                    torch.zeros((max_len - cur_len, cur_new_embed.shape[1]), dtype=cur_new_embed.dtype, device=cur_new_embed.device)
+                ), dim=0))
+                if cur_len > 0:
+                    new_labels_padded[i, :cur_len] = cur_new_labels
+                    attention_mask[i, :cur_len] = True
+                    position_ids[i, :cur_len] = torch.arange(0, cur_len, dtype=position_ids.dtype, device=position_ids.device)
+
+        new_input_embeds = torch.stack(new_input_embeds_padded, dim=0)
+
+        if _labels is None:
+            new_labels = None
+        else:
+            new_labels = new_labels_padded
+
+        if _attention_mask is None:
+            attention_mask = None
+        else:
+            attention_mask = attention_mask.to(dtype=_attention_mask.dtype)
+
+        if _position_ids is None:
+            position_ids = None
+        return None, position_ids, attention_mask, past_key_values, new_input_embeds, new_labels
+
 
     def cat_proj(self, all_features):  # concatenate features and project them together
         feature_split_size = [x.shape[0] for x in all_features]  # patch size for each image
@@ -438,7 +724,7 @@ class VStreamMetaForCausalLM(ABC):
         feature_proj = torch.split(feature_proj, feature_split_size, dim=0)  # divide the projected features back
         return feature_proj
         
-    def prepare_inputs_labels_for_multimodal(
+    def prepare_inputs_labels_for_multimodal_origin(
         self,
         input_ids,
         position_ids,
