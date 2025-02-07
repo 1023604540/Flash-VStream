@@ -510,13 +510,22 @@ class VStreamMetaForCausalLM(ABC):
         return new_image_features
 
     def query_match(self, query_embedding, recurrent_memory_segments):
-        max_avg_similarity = -1  # 初始化为最低值
-        best_segment_idx = -1    # 用于记录最优片段索引
+        max_avg_similarity = -1  
+        best_segment_idx = -1 
 
         for idx, segment_features in enumerate(recurrent_memory_segments):
-            # 计算每个片段中所有特征向量与 query 的余弦相似度
-            similarities = F.cosine_similarity(segment_features, query_embedding.unsqueeze(0), dim=1)
-            avg_similarity = similarities.mean().item() 
+            # 将 segment_features 经过 mm_projector 投影，并去掉第一维（batch 维），形状变为 [N, D]
+            # 此处使用 .detach() 确保其不参与梯度计算
+            segment_features = self.get_model().mm_projector(segment_features).detach()  # [N, D]
+
+            # 将 query_embedding 形状为 [T, D] 扩展为 [T, 1, D]
+            # 将 segment_features 形状为 [N, D] 扩展为 [1, N, D]
+            # 这样 F.cosine_similarity 计算后返回的 shape 为 [T, N]
+            similarities = F.cosine_similarity(query_embedding.unsqueeze(1), segment_features, dim=2)
+            # similarities 的形状为 [T, N]
+
+            # 计算平均余弦相似度，既可以对所有 token 和所有片段向量取平均
+            avg_similarity = similarities.mean().item()
 
             if avg_similarity > max_avg_similarity:
                 max_avg_similarity = avg_similarity
@@ -546,6 +555,8 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = torch.arange(0, input_ids.shape[1], dtype=torch.long, device=input_ids.device)
         if labels is None:  # if labels are not provided, use IGNORE_INDEX. This tells the model to ignore these tokens for loss computation.
             labels = torch.full_like(input_ids, IGNORE_INDEX)
+        
+        input_ids_o = input_ids
 
         # remove the padding using attention_mask -- TODO: double check
         input_ids = [cur_input_ids[cur_attention_mask] for cur_input_ids, cur_attention_mask in zip(input_ids, attention_mask)] # only input_ids with True in attention mask are kept
@@ -556,7 +567,6 @@ class VStreamMetaForCausalLM(ABC):
         for batch_idx, cur_input_ids in enumerate(input_ids):
             num_images = (cur_input_ids == IMAGE_TOKEN_INDEX).sum() # count number of image tokens in the input_ids
             if num_images == 0:
-                cur_image_features = image_features[cur_image_idx]
                 cur_input_embeds = self.get_model().embed_tokens(cur_input_ids)
                 new_input_embeds.append(cur_input_embeds)
                 new_labels.append(labels[batch_idx])
@@ -588,8 +598,8 @@ class VStreamMetaForCausalLM(ABC):
             new_labels.append(cur_new_labels)
 
         vision_tower = self.get_vision_tower()
-        if vision_tower is None or (images is None and features is None) or input_ids.shape[1] == 1:
-            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids.shape[1] == 1:
+        if vision_tower is None or (images is None and features is None) or input_ids_o.shape[1] == 1:
+            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids_o.shape[1] == 1:
                 target_shape = past_key_values[-1][-1].shape[-2] + 1
                 if target_shape - attention_mask.shape[1] >= 0:
                     attention_mask = torch.cat((attention_mask, torch.ones(
@@ -659,7 +669,7 @@ class VStreamMetaForCausalLM(ABC):
             new_input_embeds[batch_idx] = cur_new_input_embeds
             new_labels[batch_idx] = cur_new_labels
             assert cur_image_idx <= len(image_features), f"cur_image_idx ({cur_image_idx}) 超出 image_features 长度 ({len(image_features)})"
-                
+        
         # TODO: image start / end is not implemented here to support pretraining.
         if getattr(self.config, 'tune_mm_mlp_adapter', False) and getattr(self.config, 'mm_use_im_start_end', False):
             raise NotImplementedError
