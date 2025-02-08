@@ -53,6 +53,7 @@ def retrieve_results(output_dir, api_key):
             with open(output_file_path, "w") as output_file:
                 output_file.write(file_response.text)
             with open(output_file_path, "r") as json_file:
+                print(f"Processing {output_file_path}")
                 for line in json_file:
                     content = json.loads(line)
                     response_body = content['response']['body']
