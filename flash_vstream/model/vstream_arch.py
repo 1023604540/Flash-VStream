@@ -548,6 +548,8 @@ class VStreamMetaForCausalLM(ABC):
         images,
         features
     ):
+        input_ids_o = input_ids
+        
         vision_tower = self.get_vision_tower()
         if vision_tower is None or (images is None and features is None) or input_ids_o.shape[1] == 1:
             if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids_o.shape[1] == 1:
@@ -574,8 +576,6 @@ class VStreamMetaForCausalLM(ABC):
             position_ids = torch.arange(0, input_ids.shape[1], dtype=torch.long, device=input_ids.device)
         if labels is None:  # if labels are not provided, use IGNORE_INDEX. This tells the model to ignore these tokens for loss computation.
             labels = torch.full_like(input_ids, IGNORE_INDEX)
-        
-        input_ids_o = input_ids
 
         input_ids = [cur_input_ids[cur_attention_mask] for cur_input_ids, cur_attention_mask in zip(input_ids, attention_mask)] # only input_ids with True in attention mask are kept
         labels = [cur_labels[cur_attention_mask] for cur_labels, cur_attention_mask in zip(labels, attention_mask)] # only labels with True in attention mask are kept
