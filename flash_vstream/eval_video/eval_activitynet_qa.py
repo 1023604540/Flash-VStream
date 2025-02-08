@@ -38,7 +38,7 @@ def prepare_batch_file(prediction_set, caption_files, output_dir, batch_size):
             # Prepare the request
             request = {"custom_id": key, "method": "POST", "url": "/v1/chat/completions", "body":
                 {
-                "model": "gpt-3.5-turbo",
+                "model": "gpt-4o-mini",
                 "messages": [
                     {
                         "role": "system",
