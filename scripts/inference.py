@@ -62,7 +62,6 @@ def run_inference(video, question, model, tokenizer, image_processor, conv_mode)
 
 if __name__ == "__main__":
     video_path = "/home/vault/b232dd/b232dd16/Flash-VStream/assets/needle_32.mp4"
-    question = "Tell me the content of this video."
     model_path = "/anvme/workspace/b232dd16-datasets/checkpoints/vstream-7b-finetune-weighted_kmeans1*8-25*4-25*1-recurrent-v3/checkpoint-5900"
     model_base = None
     conv_mode = "vicuna_v1"
