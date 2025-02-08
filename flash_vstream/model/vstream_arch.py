@@ -533,6 +533,9 @@ class VStreamMetaForCausalLM(ABC):
                 recurrent_memory, _ = self.recurrent_memory_transformer.forward(memory_feature, recurrent_memory)
                 recurrent_memory_segments.append(recurrent_memory)
             picked_idx = self.query_match(query_embedding, recurrent_memory_segments)
+            if len(recurrent_memory_segments) > 1:
+                print(f"picked_idx: {picked_idx}")
+                print(f"length of recurrent_memory_segments: {len(recurrent_memory_segments)}")
             recurrent_memory = recurrent_memory_segments[picked_idx]
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
             new_image_features.append(memory_feature)
