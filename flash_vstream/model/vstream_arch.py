@@ -457,7 +457,7 @@ class VStreamMetaForCausalLM(ABC):
                                         f'while video_sample_type = {compress_type} is not supported yet.')
         new_image_features = []
         for image_idx, img_feature in enumerate(image_features):  # [T, P*P, D]
-            boundaries = segment(img_feature.mean(dim=1))\
+            boundaries = segment(img_feature.mean(dim=1))
             print("boundaries: ", boundaries)
             segments = []
             #prev_idx = 0
