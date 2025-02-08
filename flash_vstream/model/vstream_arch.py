@@ -16,6 +16,7 @@
 #    limitations under the License.
 
 from email.mime import image
+import re
 import time
 import math
 import logging
@@ -503,7 +504,11 @@ class VStreamMetaForCausalLM(ABC):
                 self.recurrent_memory_transformer = self.recurrent_memory_transformer.to(self.device)
                 recurrent_memory, _ = self.recurrent_memory_transformer.forward(memory_feature, recurrent_memory)
                 recurrent_memory_segments.append(recurrent_memory)
+            
             picked_idx = self.query_match(query_embedding, recurrent_memory_segments)
+            if len(recurrent_memory_segments) > 1:
+                print("length of segments: ", len(recurrent_memory_segments))
+                print("picked_idx: ", picked_idx)
             recurrent_memory = recurrent_memory_segments[picked_idx]
             memory_feature = torch.cat([Turing_memory_compreesed.flatten(0, 1), long_memory_compreesed.flatten(0, 1), cur_memory.flatten(0, 1), recurrent_memory.flatten(0, 1)], dim=0)
             new_image_features.append(memory_feature)
@@ -543,6 +548,20 @@ class VStreamMetaForCausalLM(ABC):
         images,
         features
     ):
+        vision_tower = self.get_vision_tower()
+        if vision_tower is None or (images is None and features is None) or input_ids_o.shape[1] == 1:
+            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids_o.shape[1] == 1:
+                target_shape = past_key_values[-1][-1].shape[-2] + 1
+                if target_shape - attention_mask.shape[1] >= 0:
+                    attention_mask = torch.cat((attention_mask, torch.ones(
+                        (attention_mask.shape[0], target_shape - attention_mask.shape[1]),
+                        dtype=attention_mask.dtype,
+                        device=attention_mask.device
+                    )), dim=1)
+                elif target_shape - attention_mask.shape[1] < 0:
+                    attention_mask = attention_mask[:, :target_shape]
+                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1  # represents the position of the last valid token in the sequence
+            return input_ids, position_ids, attention_mask, past_key_values, None, labels
         
         _labels = labels
         _position_ids = position_ids
@@ -558,7 +577,6 @@ class VStreamMetaForCausalLM(ABC):
         
         input_ids_o = input_ids
 
-        # remove the padding using attention_mask -- TODO: double check
         input_ids = [cur_input_ids[cur_attention_mask] for cur_input_ids, cur_attention_mask in zip(input_ids, attention_mask)] # only input_ids with True in attention mask are kept
         labels = [cur_labels[cur_attention_mask] for cur_labels, cur_attention_mask in zip(labels, attention_mask)] # only labels with True in attention mask are kept
         new_input_embeds = []
@@ -596,21 +614,6 @@ class VStreamMetaForCausalLM(ABC):
 
             new_input_embeds.append(cur_new_input_embeds)
             new_labels.append(cur_new_labels)
-
-        vision_tower = self.get_vision_tower()
-        if vision_tower is None or (images is None and features is None) or input_ids_o.shape[1] == 1:
-            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids_o.shape[1] == 1:
-                target_shape = past_key_values[-1][-1].shape[-2] + 1
-                if target_shape - attention_mask.shape[1] >= 0:
-                    attention_mask = torch.cat((attention_mask, torch.ones(
-                        (attention_mask.shape[0], target_shape - attention_mask.shape[1]),
-                        dtype=attention_mask.dtype,
-                        device=attention_mask.device
-                    )), dim=1)
-                elif target_shape - attention_mask.shape[1] < 0:
-                    attention_mask = attention_mask[:, :target_shape]
-                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1  # represents the position of the last valid token in the sequence
-            return input_ids, position_ids, attention_mask, past_key_values, None, labels
 
         if (features is not None) or (type(images) is list) or (images.ndim == 5):
             compress_size = getattr(self.config, "compress_size", 1)
