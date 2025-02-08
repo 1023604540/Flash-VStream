@@ -379,7 +379,7 @@ class VStreamMetaForCausalLM(ABC):
             new_image_features.append(memory_feature)
         return new_image_features
 
-    def compress_temporal_features(self, image_features):
+    def compress_temporal_features_v3(self, image_features):
         video_long_memory_length = getattr(self.config, "video_long_memory_length", 10)
         video_Turing_memory_length = getattr(self.config, "video_Turing_memory_length", 10)
         video_short_memory_length = getattr(self.config, "video_short_memory_length", 10)  # not used
@@ -572,7 +572,21 @@ class VStreamMetaForCausalLM(ABC):
         images,
         features
     ):
-        
+        vision_tower = self.get_vision_tower()
+        if vision_tower is None or (images is None and features is None) or input_ids_o.shape[1] == 1:
+            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids_o.shape[1] == 1:
+                target_shape = past_key_values[-1][-1].shape[-2] + 1
+                if target_shape - attention_mask.shape[1] >= 0:
+                    attention_mask = torch.cat((attention_mask, torch.ones(
+                        (attention_mask.shape[0], target_shape - attention_mask.shape[1]),
+                        dtype=attention_mask.dtype,
+                        device=attention_mask.device
+                    )), dim=1)
+                elif target_shape - attention_mask.shape[1] < 0:
+                    attention_mask = attention_mask[:, :target_shape]
+                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1  # represents the position of the last valid token in the sequence
+            return input_ids, position_ids, attention_mask, past_key_values, None, labels
+
         _labels = labels
         _position_ids = position_ids
         _attention_mask = attention_mask
@@ -625,21 +639,6 @@ class VStreamMetaForCausalLM(ABC):
 
             new_input_embeds.append(cur_new_input_embeds)
             new_labels.append(cur_new_labels)
-
-        vision_tower = self.get_vision_tower()
-        if vision_tower is None or (images is None and features is None) or input_ids_o.shape[1] == 1:
-            if past_key_values is not None and vision_tower is not None and ((images is not None) or (features is not None)) and input_ids_o.shape[1] == 1:
-                target_shape = past_key_values[-1][-1].shape[-2] + 1
-                if target_shape - attention_mask.shape[1] >= 0:
-                    attention_mask = torch.cat((attention_mask, torch.ones(
-                        (attention_mask.shape[0], target_shape - attention_mask.shape[1]),
-                        dtype=attention_mask.dtype,
-                        device=attention_mask.device
-                    )), dim=1)
-                elif target_shape - attention_mask.shape[1] < 0:
-                    attention_mask = attention_mask[:, :target_shape]
-                position_ids = torch.sum(attention_mask, dim=1).unsqueeze(-1) - 1  # represents the position of the last valid token in the sequence
-            return input_ids, position_ids, attention_mask, past_key_values, None, labels
 
         if (features is not None) or (type(images) is list) or (images.ndim == 5):
             compress_size = getattr(self.config, "compress_size", 1)
