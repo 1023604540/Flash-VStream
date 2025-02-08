@@ -15,13 +15,8 @@ def load_video(video_path):
     spare_frames = vr.get_batch(frame_idx).asnumpy()
     return spare_frames
 
-def run_inference(video_path, question, model_path, model_base=None, conv_mode=None, model_max_length=None):
-    # Initialize the model
-    model_name = get_model_name_from_path(model_path)
-    tokenizer, model, image_processor, context_len = load_pretrained_model(model_path, model_base, model_name, model_max_length)
-
+def run_inference(video, question, model, tokenizer, image_processor, conv_mode):
     # Load the video file
-    video = load_video(video_path)
     video = image_processor.preprocess(video, return_tensors='pt')['pixel_values'].half().cuda()
     video = [video]
 
@@ -73,6 +68,14 @@ if __name__ == "__main__":
     conv_mode = "vicuna_v1"
     model_max_length = None
 
-    answer = run_inference(video_path, question, model_path, model_base, conv_mode, model_max_length)
-    print(f"Question: {question}")
-    print(f"Answer: {answer}")
+    model_name = get_model_name_from_path(model_path)
+    tokenizer, model, image_processor, context_len = load_pretrained_model(model_path, model_base, model_name, model_max_length)
+    video = load_video(video_path)
+
+    while True:
+        question = input("Enter your question (or type 'exit' to quit): ")
+        if question.lower() == 'exit':
+            break
+        answer = run_inference(video, question, model, tokenizer, image_processor, conv_mode)
+        print(f"Question: {question}")
+        print(f"Answer: {answer}")
